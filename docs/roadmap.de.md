@@ -23,7 +23,8 @@
 
 ## Phase 1 – Hardware in Betrieb nehmen 🔜
 
-- [ ] [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix) mit Python-Anbindung installieren
+- [x] [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix) installieren und Demo-Programme bauen
+- [ ] Python-Anbindung der Bibliothek installieren
 - [ ] Demo-Programme auf den Panels laufen lassen
 - [ ] Panel-Reihenfolge prüfen (zwei parallele Ketten mit je zwei Panels)
 - [ ] Farbreihenfolge korrigieren (diese Panels brauchen `RBG`)
@@ -55,6 +56,7 @@
 - [ ] Wetter-Modul
 - [ ] Steuerung und Einstellungen über eine Webseite
 - [ ] Übergänge zwischen den Modulen
+- [ ] API Schnittstelle (Matrix an/aus) für befehle von Externen geräten (z.b. Siemens S7)
 
 ---
 
