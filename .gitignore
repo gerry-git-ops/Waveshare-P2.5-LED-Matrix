@@ -3,10 +3,10 @@ __pycache__/
 *.pyc
 .venv/
 
-# Persönliche Konfiguration (die Vorlage config.example.yaml darf rein)
+# Local configuration (config.example.yaml is allowed)
 config.yaml
 .env
 secrets.*
 
-# Private Inhalte, z. B. eigene Bilder und GIFs
+# Private content, e.g. your own images and GIFs
 private/

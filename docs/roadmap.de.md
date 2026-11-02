@@ -56,7 +56,7 @@
 - [ ] Wetter-Modul
 - [ ] Steuerung und Einstellungen über eine Webseite
 - [ ] Übergänge zwischen den Modulen
-- [ ] API Schnittstelle (Matrix an/aus) für befehle von Externen geräten (z.b. Siemens S7)
+- [ ] API-Schnittstelle (Matrix an/aus) für Befehle von externen Geräten (z.B. Siemens S7)
 
 ---
 
