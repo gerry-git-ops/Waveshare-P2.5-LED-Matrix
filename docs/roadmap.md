@@ -36,6 +36,8 @@
 - [ ] Module interface (`render(t)`) and module loader
 - [ ] Scheduler: order and duration of modules
 - [ ] Configuration via `config.yaml` (plus a `config.example.yaml` template)
+- [ ] Hardware-independent design: panel size, rows, chain length and wiring only in `config.yaml`
+- [ ] Preview mode without hardware, for developing modules on a PC
 
 ## Phase 3 – First modules
 

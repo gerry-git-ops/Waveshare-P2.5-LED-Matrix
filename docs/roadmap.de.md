@@ -36,6 +36,8 @@
 - [ ] Modul-Schnittstelle (`render(t)`) und Modul-Lader
 - [ ] Scheduler: Reihenfolge und Dauer der Module
 - [ ] Konfiguration über `config.yaml` (mit Vorlage `config.example.yaml`)
+- [ ] Hardware-unabhängiger Aufbau: Panelgröße, Reihen, Kettenlänge und Verdrahtung nur in der `config.yaml`
+- [ ] Vorschau-Modus ohne Hardware, um Module am PC zu entwickeln
 
 ## Phase 3 – Erste Module
 
