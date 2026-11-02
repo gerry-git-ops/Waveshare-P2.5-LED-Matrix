@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Persönliche Konfiguration (die Vorlage config.example.yaml darf rein)
+config.yaml
+.env
+secrets.*
+
+# Private Inhalte, z. B. eigene Bilder und GIFs
+private/
