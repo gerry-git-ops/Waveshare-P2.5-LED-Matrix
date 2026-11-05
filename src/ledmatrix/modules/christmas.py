@@ -1,7 +1,7 @@
 """Christmas countdown with garland, tree and falling snow."""
 
 import math
-import random
+from ledmatrix.widgets.snow import Snow
 from datetime import datetime, timedelta
 
 from PIL import Image, ImageDraw
@@ -32,7 +32,7 @@ class Christmas(Module):
         self.day_label = self.text("day")
         self.done_text = self.text("done")
         self.hour = hour
-        self.snow_count = snow
+        self.snow = Snow(width, height, count=snow)
 
         # the tree takes the left part, but only if the display is wide enough
         self.tree_w = int(height * 0.45) if width >= height * 1.5 else 0
@@ -49,13 +49,7 @@ class Christmas(Module):
         self.rows_top = top
 
     def start(self) -> None:
-        # new snowflakes every time the module becomes active
-        rnd = random.Random()
-        self.flakes = [
-            (rnd.uniform(0, self.width), rnd.uniform(0, self.height),
-             rnd.uniform(5, 12), rnd.uniform(0, math.tau))
-            for _ in range(self.snow_count)
-        ]
+        self.snow.start()
 
     # ---------- time ----------
 
@@ -72,7 +66,7 @@ class Christmas(Module):
         img = Image.new("RGB", (self.width, self.height))
         draw = ImageDraw.Draw(img)
 
-        self._draw_snow(draw, t)
+        self.snow.draw(img, 0, 0, t)
         self._draw_garland(draw, t)
         if self.tree_w:
             self._draw_tree(draw, t)
@@ -84,12 +78,6 @@ class Christmas(Module):
         else:
             self._draw_done(draw, t)
         return img
-
-    def _draw_snow(self, draw: ImageDraw.ImageDraw, t: float) -> None:
-        for x0, y0, speed, phase in self.flakes:
-            y = (y0 + speed * t) % self.height
-            x = (x0 + 2 * math.sin(t + phase)) % self.width
-            draw.point((x, y), fill=(110, 110, 130))
 
     def _draw_garland(self, draw: ImageDraw.ImageDraw, t: float) -> None:
         span = 16  # distance between two hooks

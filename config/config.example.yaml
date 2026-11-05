@@ -37,3 +37,8 @@ modules:                    # played in this order, then from the start
     size: 0.6               # text height, share of the display height
     rainbow: true           # or: color: [255, 255, 255]
     # text: "Your own text" # optional, replaces the translated default text
+
+  - type: gif
+    file: examples/star.gif
+    fit: contain            # contain, cover or stretch
+    loops: 3
