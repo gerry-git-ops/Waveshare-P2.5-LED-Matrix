@@ -11,6 +11,7 @@ Build your own modules – clocks, countdowns, crypto tickers, animations – an
 ![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)
 ![Panels](https://img.shields.io/badge/Panels-4%C3%97%2064%C3%9732-00b4d8)
 ![Status](https://img.shields.io/badge/Status-work%20in%20progress-orange)
+![License](https://img.shields.io/badge/License-GPL--3.0-blue)
 
 <img src="docs/images/matrix-clock-blue.jpg" width="49%" alt="Clock module with seconds on the LED matrix">
 <img src="docs/images/matrix-clock-orange.jpg" width="49%" alt="Clock module without seconds on the LED matrix">
@@ -307,6 +308,14 @@ With `sudo`, always use the Python of the venv: `sudo .venv/bin/python -m ledmat
 
 <br>An address line (A, B, C or D) is missing on that chain – check the wiring.
 </details>
+
+## ✦ License
+
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
+
+It builds on [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix) by Henner Zeller (GPL).
+The bundled font [Inter](https://github.com/rsms/inter) is licensed under the
+[SIL Open Font License 1.1](src/ledmatrix/assets/fonts/OFL.txt).
 
 ## ✦ Roadmap
 
