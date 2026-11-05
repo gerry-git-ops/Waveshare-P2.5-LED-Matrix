@@ -24,10 +24,10 @@
 ## Phase 1 – Hardware bring-up 🔜
 
 - [x] Install [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix) and build the demo programs
-- [ ] Install the Python bindings of the library
-- [ ] Run the demo programs on the panels
-- [ ] Verify panel order (two parallel chains of two panels)
-- [ ] Fix the color order (these panels need `RBG`)
+- [x] Install the Python bindings of the library
+- [x] Run the demo programs on the panels
+- [x] Verify panel order (two parallel chains of two panels)
+- [x] Fix the color order (these panels need `RBG`)
 - [ ] Tune `gpio_slowdown` and brightness for a flicker-free image
 
 ## Phase 2 – Core

@@ -24,10 +24,10 @@
 ## Phase 1 – Hardware in Betrieb nehmen 🔜
 
 - [x] [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix) installieren und Demo-Programme bauen
-- [ ] Python-Anbindung der Bibliothek installieren
-- [ ] Demo-Programme auf den Panels laufen lassen
-- [ ] Panel-Reihenfolge prüfen (zwei parallele Ketten mit je zwei Panels)
-- [ ] Farbreihenfolge korrigieren (diese Panels brauchen `RBG`)
+- [x] Python-Anbindung der Bibliothek installieren
+- [x] Demo-Programme auf den Panels laufen lassen
+- [x] Panel-Reihenfolge prüfen (zwei parallele Ketten mit je zwei Panels)
+- [x] Farbreihenfolge korrigieren (diese Panels brauchen `RBG`)
 - [ ] `gpio_slowdown` und Helligkeit für ein flackerfreies Bild einstellen
 
 ## Phase 2 – Kern
