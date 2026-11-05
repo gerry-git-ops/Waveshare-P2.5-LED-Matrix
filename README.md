@@ -251,7 +251,7 @@ nothing breaks.
 | `christmas` | 🎄 Countdown to Christmas Eve with garland, tree and snow | `hour`, `snow`, [texts](#-languages) | ✅ |
 | `scrolltext` | Scrolling text in one color or rainbow, runs a set number of times | `loops`, `speed`, `size`, `color`, `rainbow`, [`text`](#-languages) | ✅ |
 | Countdown | Days, hours, minutes until a date | | planned |
-| GIF player | Play your own animations | | planned |
+| `gif` | Plays an animated GIF a set number of times | `file`, `fit`, `speed`, `loops` | ✅ |
 | Crypto ticker | Prices via web API, with history | | idea |
 
 <div align="center">
@@ -276,6 +276,83 @@ nothing breaks.
 
 > [!NOTE]
 > Leave out `duration` for `scrolltext` – otherwise it overrides the loops.
+
+<div align="center">
+<img src="docs/images/gif-star.gif" width="60%" alt="Example GIF of a spinning star on the LED matrix">
+<br><sub><code>gif</code> playing the included example <code>examples/star.gif</code> – original pixel art made for this project.</sub>
+</div>
+
+```yaml
+  - type: gif
+    file: examples/star.gif # path from the project folder
+    fit: contain            # contain, cover or stretch
+    speed: 1.0              # 2.0 = twice as fast
+    loops: 3                # how often the animation plays completely
+```
+
+> [!NOTE]
+> Only use GIFs you are allowed to use. Your own GIFs are best kept in the `private/` folder –
+> it is ignored by Git.
+
+## ✦ Widgets – building blocks
+
+Modules don't have to start from scratch: **widgets** are small building blocks that each draw
+*one thing* into an *area* you give them. A module just puts them together – back to front.
+
+| Widget | Draws | Options |
+|--------|-------|---------|
+| `ScrollingText` | text moving from right to left | `text`, `color`, `rainbow`, `speed`, `size` |
+| `Gif` | an animated GIF or a still image | `path`, `fit`, `speed` |
+| `Snow` | falling snowflakes | `count`, `color` |
+
+The built-in modules are made of them, too: `scrolltext` is one `ScrollingText`,
+`gif` is one `Gif`, and `christmas` uses `Snow`.
+
+Example – a star with falling snow and a rainbow text in the bottom row:
+
+```python
+from PIL import Image
+
+from ledmatrix.modules.base import Module
+from ledmatrix.widgets.gif import Gif
+from ledmatrix.widgets.scrolling_text import ScrollingText
+from ledmatrix.widgets.snow import Snow
+
+
+class StarNight(Module):
+    """A star with falling snow, and a scrolling text below."""
+
+    texts = {
+        "en": {"text": "Good night!"},
+        "de": {"text": "Gute Nacht!"},
+    }
+
+    def __init__(self, width: int, height: int, **kwargs) -> None:
+        super().__init__(width, height, **kwargs)
+        text_h = height // 4                       # bottom quarter for the text
+        self.snow = Snow(width, height - text_h, count=30)
+        self.star = Gif(width, height - text_h, "examples/star.gif")
+        self.scroller = ScrollingText(width, text_h, self.text("text"), rainbow=True, size=0.8)
+        self.duration = 2 * self.scroller.pass_time()  # two runs of the text
+
+    def start(self) -> None:
+        self.snow.start()
+
+    def render(self, t: float) -> Image.Image:
+        img = Image.new("RGB", (self.width, self.height))
+        text_y = self.height - self.scroller.height
+        self.star.draw(img, 0, 0, t)               # back
+        self.snow.draw(img, 0, 0, t)               # middle
+        self.scroller.draw(img, 0, text_y, t)          # bottom row
+        return img
+```
+
+<div align="center">
+<img src="docs/images/widgets-example.png" width="60%" alt="Star, snow and scrolling text combined in one module">
+</div>
+
+`draw(img, x, y, t)` paints the widget at position `x, y`, every widget only within its own size.
+What is drawn first lies in the back.
 
 ## ✦ Build your own module
 
@@ -368,6 +445,7 @@ Waveshare-P2.5-LED-Matrix/
 ├── config/
 │   └── config.example.yaml     template for your config.yaml
 ├── docs/                       translations, roadmap, images
+├── examples/                   example files, e.g. star.gif
 ├── src/ledmatrix/
 │   ├── __main__.py             entry point (python -m ledmatrix)
 │   ├── config.py               load and validate the config
@@ -378,7 +456,13 @@ Waveshare-P2.5-LED-Matrix/
 │   │   ├── base.py             base class for all modules (incl. translations)
 │   │   ├── clock.py            clock module
 │   │   ├── christmas.py        Christmas countdown
+│   │   ├── gif.py              GIF player
 │   │   └── scrolltext.py       scrolling text
+│   ├── widgets/                building blocks for modules
+│   │   ├── base.py             base class for all widgets
+│   │   ├── gif.py              animated GIF
+│   │   ├── scrolling_text.py   scrolling text
+│   │   └── snow.py             falling snow
 │   ├── preview/
 │   │   ├── renderer.py         web server for the browser preview
 │   │   └── index.html          preview page

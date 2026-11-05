@@ -47,7 +47,8 @@
 - [x] Christmas countdown with garland, tree and snow 🎄
 - [x] Texts in several languages (en, de, fr, es)
 - [ ] Countdown to any date
-- [ ] GIF player
+- [x] GIF player with example GIF
+- [x] Widgets as reusable building blocks (scrolling text, GIF, snow)
 
 ## Phase 4 – Running it for real
 

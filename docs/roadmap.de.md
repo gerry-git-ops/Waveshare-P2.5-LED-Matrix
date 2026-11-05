@@ -47,7 +47,8 @@
 - [x] Weihnachts-Countdown mit Lichterkette, Baum und Schnee 🎄
 - [x] Texte in mehreren Sprachen (en, de, fr, es)
 - [ ] Countdown zu einem beliebigen Datum
-- [ ] GIF-Player
+- [x] GIF-Player mit Beispiel-GIF
+- [x] Widgets als wiederverwendbare Bausteine (Lauftext, GIF, Schnee)
 
 ## Phase 4 – Dauerbetrieb
 
