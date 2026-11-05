@@ -4,11 +4,13 @@ from ledmatrix.config import ModuleConfig
 from ledmatrix.modules.base import Module
 from ledmatrix.modules.clock import Clock
 from ledmatrix.modules.christmas import Christmas
+from ledmatrix.modules.scrolltext import ScrollText
 
 # name in config.yaml -> module class
 REGISTRY: dict[str, type[Module]] = {
     "clock": Clock,
     "christmas": Christmas,
+    "scrolltext": ScrollText,
 }
 
 def create_module(cfg: ModuleConfig, width: int, height: int,
@@ -26,5 +28,6 @@ def create_module(cfg: ModuleConfig, width: int, height: int,
     overrides = {key: options.pop(key) for key in list(options) if key in text_keys}
 
     module = cls(width, height, language=language, overrides=overrides, **options)
-    module.duration = cfg.duration
+    if cfg.duration is not None:
+        module.duration = cfg.duration
     return module

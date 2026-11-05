@@ -19,7 +19,8 @@ def main() -> None:
 
     cfg = load_config(args.config)
     hw = cfg.hardware
-    modules = [create_module(m, hw.width, hw.height, cfg.language) for m in cfg.modules]
+    modules = [create_module(m, hw.width, hw.height, cfg.language)
+                for m in cfg.modules if m.enabled]
 
     if args.preview:
         from ledmatrix.preview.renderer import PreviewRenderer

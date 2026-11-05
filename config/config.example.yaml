@@ -21,6 +21,7 @@ modules:                    # played in this order, then from the start
     fmt: "%H:%M:%S"
 
   - type: clock
+    enabled: false
     duration: 5
     color: [255, 120, 0]
     fmt: "%H:%M"
@@ -29,3 +30,10 @@ modules:                    # played in this order, then from the start
     duration: 15
     hour: 18                # Christmas Eve at 18:00, 0 = midnight
     snow: 40                # number of snowflakes, 0 = no snow
+
+  - type: scrolltext
+    loops: 2                # how often the text runs through completely
+    speed: 40               # pixels per second
+    size: 0.6               # text height, share of the display height
+    rainbow: true           # or: color: [255, 255, 255]
+    # text: "Your own text" # optional, replaces the translated default text

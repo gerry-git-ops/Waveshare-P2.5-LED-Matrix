@@ -12,7 +12,7 @@ class Scheduler:
     def __init__(self, renderer: Renderer, modules: list[Module],
                  fps: int = 30) -> None:
         if not modules:
-            raise ValueError("At least one module is required")
+            raise ValueError("At least one enabled module is required")
         self.renderer = renderer
         self.modules = modules
         self.frame_time = 1 / fps

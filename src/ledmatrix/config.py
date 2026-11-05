@@ -36,7 +36,8 @@ class ModuleConfig(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     type: str
-    duration: float = Field(10.0, gt=0)
+    enabled: bool = True
+    duration: float | None = Field(None, gt=0)
 
 class Config(BaseModel):
     """The whole configuration."""
