@@ -24,3 +24,8 @@ modules:                    # played in this order, then from the start
     duration: 5
     color: [255, 120, 0]
     fmt: "%H:%M"
+
+  - type: christmas
+    duration: 15
+    hour: 18                # Christmas Eve at 18:00, 0 = midnight
+    snow: 40                # number of snowflakes, 0 = no snow

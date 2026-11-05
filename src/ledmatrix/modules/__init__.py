@@ -3,12 +3,13 @@
 from ledmatrix.config import ModuleConfig
 from ledmatrix.modules.base import Module
 from ledmatrix.modules.clock import Clock
+from ledmatrix.modules.christmas import Christmas
 
 # name in config.yaml -> module class
 REGISTRY: dict[str, type[Module]] = {
     "clock": Clock,
+    "christmas": Christmas,
 }
-
 
 def create_module(cfg: ModuleConfig, width: int, height: int,
                   language: str = "en") -> Module:
