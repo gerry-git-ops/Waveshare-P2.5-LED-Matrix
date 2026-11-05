@@ -1,0 +1,2 @@
+# Language statistics: count the project as Python
+src/ledmatrix/preview/*.html linguist-detectable=false
