@@ -10,9 +10,24 @@ class Module(ABC):
 
     duration: float = 10.0  # seconds on screen before the next module
 
-    def __init__(self, width: int, height: int) -> None:
+    # translations: {"en": {"key": "text", ...}, "de": {...}, ...}
+    texts: dict[str, dict[str, str]] = {}
+
+    def __init__(self, width: int, height: int, language: str = "en",
+                 overrides: dict[str, str] | None = None) -> None:
         self.width = width
         self.height = height
+        self.language = language
+        self.overrides = overrides or {}
+
+    def text(self, key: str) -> str:
+        """Text in the configured language, English as fallback."""
+        if key in self.overrides:
+            return self.overrides[key]
+        for lang in (self.language, "en"):
+            if key in self.texts.get(lang, {}):
+                return self.texts[lang][key]
+        return key
 
     def start(self) -> None:
         """Called each time the module becomes active (optional)."""

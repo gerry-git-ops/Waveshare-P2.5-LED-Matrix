@@ -12,6 +12,7 @@ hardware:
   brightness: 50            # 0-100
 
 fps: 30                     # frames per second
+language: en                # en, de, fr, es – missing texts fall back to English
 
 modules:                    # played in this order, then from the start
   - type: clock

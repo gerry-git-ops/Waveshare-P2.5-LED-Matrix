@@ -44,6 +44,7 @@ class Config(BaseModel):
     hardware: HardwareConfig = HardwareConfig()
     fps: int = Field(30, ge=1, le=120)
     modules: list[ModuleConfig] = []
+    language: str = "en"
 
 
 def load_config(path: Path | str = "config/config.yaml") -> Config:
