@@ -41,7 +41,8 @@
 
 ## Phase 3 – Erste Module 🔜
 
-- [ ] Lauftext
+- [x] Lauftext (einfarbig oder Regenbogen, mit festgelegter Anzahl Durchläufe)
+- [x] Module in der Config ein- und ausschalten (`enabled`)
 - [x] Uhr
 - [x] Weihnachts-Countdown mit Lichterkette, Baum und Schnee 🎄
 - [x] Texte in mehreren Sprachen (en, de, fr, es)

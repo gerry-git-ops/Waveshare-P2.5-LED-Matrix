@@ -41,7 +41,8 @@
 
 ## Phase 3 – First modules 🔜
 
-- [ ] Scrolling text
+- [x] Scrolling text (color or rainbow, runs a set number of loops)
+- [x] Switch modules on and off in the config (`enabled`)
 - [x] Clock
 - [x] Christmas countdown with garland, tree and snow 🎄
 - [x] Texts in several languages (en, de, fr, es)

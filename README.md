@@ -212,7 +212,13 @@ The display size is calculated from the hardware section:
 > The hardware section must match the panels that are **actually connected**.
 > If it doesn't, panels show copies of the image or flicker.
 
-Every module entry needs a `type` and optionally a `duration`.
+Every module entry needs a `type`. Optional for every module:
+
+| Key | Meaning |
+|-----|---------|
+| `enabled` | `false` switches the module off without deleting it (default: `true`) |
+| `duration` | seconds on screen – if left out, the module decides itself (e.g. `scrolltext` by its loops) |
+
 All other keys are handed to the module as options.
 
 ### ✦ Languages
@@ -232,6 +238,7 @@ nothing breaks.
 | Module | Text keys |
 |--------|-----------|
 | `christmas` | `title`, `days`, `day`, `done` |
+| `scrolltext` | `text` |
 
 **Your language is missing?** Add it to the `texts` of the module (see
 [Build your own module](#-build-your-own-module)) and open a pull request – contributions are very welcome.
@@ -242,7 +249,7 @@ nothing breaks.
 |--------|-------------|---------|--------|
 | `clock` | Digital clock, scales itself to the display | `color`, `fmt` ([strftime](https://docs.python.org/3/library/time.html#time.strftime)) | ✅ |
 | `christmas` | 🎄 Countdown to Christmas Eve with garland, tree and snow | `hour`, `snow`, [texts](#-languages) | ✅ |
-| Scrolling text | Text with adjustable speed | | planned |
+| `scrolltext` | Scrolling text in one color or rainbow, runs a set number of times | `loops`, `speed`, `size`, `color`, `rainbow`, [`text`](#-languages) | ✅ |
 | Countdown | Days, hours, minutes until a date | | planned |
 | GIF player | Play your own animations | | planned |
 | Crypto ticker | Prices via web API, with history | | idea |
@@ -252,6 +259,23 @@ nothing breaks.
 <img src="docs/images/matrix-clock-orange.jpg" width="49%" alt="Clock module without seconds">
 <br><sub>The same <code>clock</code> module twice – only <code>color</code> and <code>fmt</code> differ.</sub>
 </div>
+
+<div align="center">
+<img src="docs/images/scrolltext.gif" width="70%" alt="Scrolling rainbow text on the LED matrix">
+<br><sub><code>scrolltext</code> with <code>rainbow: true</code> – it runs through completely <code>loops</code> times, then the next module follows.</sub>
+</div>
+
+```yaml
+  - type: scrolltext
+    loops: 2                # how often the text runs through completely
+    speed: 40               # pixels per second
+    size: 0.6               # text height, share of the display height
+    rainbow: true           # or: color: [255, 255, 255]
+    # text: "Your own text" # optional, replaces the translated default text
+```
+
+> [!NOTE]
+> Leave out `duration` for `scrolltext` – otherwise it overrides the loops.
 
 ## ✦ Build your own module
 
@@ -353,7 +377,8 @@ Waveshare-P2.5-LED-Matrix/
 │   ├── modules/
 │   │   ├── base.py             base class for all modules (incl. translations)
 │   │   ├── clock.py            clock module
-│   │   └── christmas.py        Christmas countdown
+│   │   ├── christmas.py        Christmas countdown
+│   │   └── scrolltext.py       scrolling text
 │   ├── preview/
 │   │   ├── renderer.py         web server for the browser preview
 │   │   └── index.html          preview page

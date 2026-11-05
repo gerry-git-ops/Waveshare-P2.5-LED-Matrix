@@ -212,7 +212,13 @@ Die Anzeigegröße wird aus dem Hardware-Teil berechnet:
 > Der Hardware-Teil muss zu den Panels passen, die **tatsächlich angeschlossen** sind.
 > Sonst zeigen Panels Kopien des Bildes oder flackern.
 
-Jeder Modul-Eintrag braucht einen `type` und optional eine `duration` (Sekunden).
+Jeder Modul-Eintrag braucht einen `type`. Für jedes Modul optional:
+
+| Schlüssel | Bedeutung |
+|-----------|-----------|
+| `enabled` | `false` schaltet das Modul aus, ohne es zu löschen (Standard: `true`) |
+| `duration` | Sekunden auf dem Display – fehlt sie, entscheidet das Modul selbst (z. B. `scrolltext` über seine Durchläufe) |
+
 Alle weiteren Angaben bekommt das Modul als Optionen.
 
 ### ✦ Sprachen
@@ -232,6 +238,7 @@ es bricht also nichts.
 | Modul | Text-Schlüssel |
 |-------|----------------|
 | `christmas` | `title`, `days`, `day`, `done` |
+| `scrolltext` | `text` |
 
 **Deine Sprache fehlt?** Ergänze sie in den `texts` des Moduls (siehe
 [Eigenes Modul bauen](#-eigenes-modul-bauen)) und schick einen Pull Request – Beiträge sind sehr willkommen.
@@ -242,7 +249,7 @@ es bricht also nichts.
 |-------|--------------|----------|--------|
 | `clock` | Digitale Uhr, passt sich selbst an die Anzeige an | `color`, `fmt` ([strftime](https://docs.python.org/3/library/time.html#time.strftime)) | ✅ |
 | `christmas` | 🎄 Countdown bis Heiligabend mit Lichterkette, Baum und Schnee | `hour`, `snow`, [Texte](#-sprachen) | ✅ |
-| Lauftext | Text mit einstellbarer Geschwindigkeit | | geplant |
+| `scrolltext` | Lauftext in einer Farbe oder im Regenbogen, läuft eine festgelegte Anzahl Mal durch | `loops`, `speed`, `size`, `color`, `rainbow`, [`text`](#-sprachen) | ✅ |
 | Countdown | Tage, Stunden, Minuten bis zu einem Datum | | geplant |
 | GIF-Player | Eigene Animationen abspielen | | geplant |
 | Krypto-Ticker | Kurse per Web-API, mit Verlauf | | Idee |
@@ -252,6 +259,23 @@ es bricht also nichts.
 <img src="images/matrix-clock-orange.jpg" width="49%" alt="Uhr-Modul ohne Sekunden">
 <br><sub>Zweimal dasselbe <code>clock</code>-Modul – nur <code>color</code> und <code>fmt</code> sind anders.</sub>
 </div>
+
+<div align="center">
+<img src="images/scrolltext.gif" width="70%" alt="Lauftext in Regenbogenfarben auf der LED-Matrix">
+<br><sub><code>scrolltext</code> mit <code>rainbow: true</code> – er läuft <code>loops</code>-mal komplett durch, dann kommt das nächste Modul.</sub>
+</div>
+
+```yaml
+  - type: scrolltext
+    loops: 2                # how often the text runs through completely
+    speed: 40               # pixels per second
+    size: 0.6               # text height, share of the display height
+    rainbow: true           # or: color: [255, 255, 255]
+    # text: "Your own text" # optional, replaces the translated default text
+```
+
+> [!NOTE]
+> Beim `scrolltext` keine `duration` angeben – sonst überstimmt sie die Durchläufe.
 
 ## ✦ Eigenes Modul bauen
 
@@ -353,7 +377,8 @@ Waveshare-P2.5-LED-Matrix/
 │   ├── modules/
 │   │   ├── base.py             Basisklasse für alle Module (inkl. Übersetzungen)
 │   │   ├── clock.py            Uhr-Modul
-│   │   └── christmas.py        Weihnachts-Countdown
+│   │   ├── christmas.py        Weihnachts-Countdown
+│   │   └── scrolltext.py       Lauftext
 │   ├── preview/
 │   │   ├── renderer.py         Webserver für die Browser-Vorschau
 │   │   └── index.html          Vorschau-Seite
