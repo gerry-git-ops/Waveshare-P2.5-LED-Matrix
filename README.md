@@ -12,11 +12,48 @@ Build your own modules – clocks, countdowns, crypto tickers, animations – an
 ![Panels](https://img.shields.io/badge/Panels-4%C3%97%2064%C3%9732-00b4d8)
 ![Status](https://img.shields.io/badge/Status-work%20in%20progress-orange)
 ![License](https://img.shields.io/badge/License-GPL--3.0-blue)
+![Languages](https://img.shields.io/badge/Languages-EN%20%C2%B7%20DE%20%C2%B7%20FR%20%C2%B7%20ES-8a2be2)
 
-<img src="docs/images/matrix-clock-blue.jpg" width="49%" alt="Clock module with seconds on the LED matrix">
-<img src="docs/images/matrix-clock-orange.jpg" width="49%" alt="Clock module without seconds on the LED matrix">
+<img src="docs/images/playlist.gif" width="100%" alt="The matrix playing the Christmas countdown and two clocks one after another">
+
+<sub>Real panels, real time: the Christmas countdown and two clock styles playing one after another.</sub>
 
 </div>
+
+---
+
+## 🎄 Seasonal highlight: Christmas countdown
+
+Get your matrix into the holiday mood: a twinkling garland, a tree with a glowing star,
+gently falling snow – and a big countdown to Christmas Eve. On Christmas Eve it switches
+to a colorful greeting, and after the holidays it starts counting towards the next Christmas by itself.
+
+<div align="center">
+<img src="docs/images/christmas.gif" width="100%" alt="Animated Christmas countdown on the LED matrix">
+</div>
+
+It speaks your language – English, German, French and Spanish are built in:
+
+<div align="center">
+<img src="docs/images/christmas-en.jpg" width="49%" alt="Christmas countdown in English">
+<img src="docs/images/christmas-de.jpg" width="49%" alt="Christmas countdown in German">
+<img src="docs/images/christmas-fr.jpg" width="49%" alt="Christmas countdown in French">
+<img src="docs/images/christmas-es.jpg" width="49%" alt="Christmas countdown in Spanish">
+</div>
+
+Add it to your `config/config.yaml`:
+
+```yaml
+language: de                # en, de, fr, es
+
+modules:
+  - type: christmas
+    duration: 15
+    hour: 18                # Christmas Eve at 18:00, 0 = midnight
+    snow: 40                # number of snowflakes, 0 = no snow
+```
+
+Your own words? Every text can be replaced right in the config – see [Languages](#-languages).
 
 ---
 
@@ -155,12 +192,17 @@ hardware:
   brightness: 50            # 0-100
 
 fps: 30                     # frames per second
+language: en                # en, de, fr, es – missing texts fall back to English
 
 modules:                    # played in this order, then from the start
   - type: clock
     duration: 5             # seconds
     color: [0, 150, 255]
     fmt: "%H:%M:%S"
+
+  - type: christmas
+    duration: 15
+    hour: 18
 ```
 
 The display size is calculated from the hardware section:
@@ -173,15 +215,43 @@ The display size is calculated from the hardware section:
 Every module entry needs a `type` and optionally a `duration`.
 All other keys are handed to the module as options.
 
+### ✦ Languages
+
+`language` sets the language for all modules. Built in: **English** (`en`), **German** (`de`),
+**French** (`fr`) and **Spanish** (`es`). If a text is missing in your language, English is used –
+nothing breaks.
+
+**Change single texts** directly in the config, no code needed. Just use the text key of the module:
+
+```yaml
+  - type: christmas
+    title: "Only"           # instead of "Christmas in"
+    done: "Ho ho ho!"       # instead of "Merry Christmas!"
+```
+
+| Module | Text keys |
+|--------|-----------|
+| `christmas` | `title`, `days`, `day`, `done` |
+
+**Your language is missing?** Add it to the `texts` of the module (see
+[Build your own module](#-build-your-own-module)) and open a pull request – contributions are very welcome.
+
 ## ✦ Modules
 
 | Module | Description | Options | Status |
 |--------|-------------|---------|--------|
 | `clock` | Digital clock, scales itself to the display | `color`, `fmt` ([strftime](https://docs.python.org/3/library/time.html#time.strftime)) | ✅ |
+| `christmas` | 🎄 Countdown to Christmas Eve with garland, tree and snow | `hour`, `snow`, [texts](#-languages) | ✅ |
 | Scrolling text | Text with adjustable speed | | planned |
 | Countdown | Days, hours, minutes until a date | | planned |
 | GIF player | Play your own animations | | planned |
 | Crypto ticker | Prices via web API, with history | | idea |
+
+<div align="center">
+<img src="docs/images/matrix-clock-blue.jpg" width="49%" alt="Clock module with seconds">
+<img src="docs/images/matrix-clock-orange.jpg" width="49%" alt="Clock module without seconds">
+<br><sub>The same <code>clock</code> module twice – only <code>color</code> and <code>fmt</code> differ.</sub>
+</div>
 
 ## ✦ Build your own module
 
@@ -199,8 +269,8 @@ from ledmatrix.modules.base import Module
 
 
 class Bounce(Module):
-    def __init__(self, width: int, height: int, color=(255, 0, 80)) -> None:
-        super().__init__(width, height)
+    def __init__(self, width: int, height: int, color=(255, 0, 80), **kwargs) -> None:
+        super().__init__(width, height, **kwargs)
         self.color = tuple(color)
 
     def render(self, t: float) -> Image.Image:
@@ -235,6 +305,35 @@ Check it with `python -m ledmatrix --preview` – done.
 > [!TIP]
 > Always calculate with `self.width` and `self.height`, never with fixed numbers –
 > then your module works on every panel setup.
+> Pass `**kwargs` on to `super().__init__()` – that's how your module gets the language.
+
+### Texts in several languages
+
+Put your texts into `texts` and read them with `self.text(...)`:
+
+```python
+from PIL import Image, ImageDraw
+
+from ledmatrix.fonts import fit_font
+from ledmatrix.modules.base import Module
+
+
+class Greeting(Module):
+    texts = {
+        "en": {"hello": "Hello!"},
+        "de": {"hello": "Hallo!"},
+    }
+
+    def render(self, t: float) -> Image.Image:
+        img = Image.new("RGB", (self.width, self.height))
+        font = fit_font(self.text("hello"), self.width - 4, self.height - 4)
+        ImageDraw.Draw(img).text((self.width / 2, self.height / 2), self.text("hello"),
+                                 font=font, fill=(255, 255, 255), anchor="mm")
+        return img
+```
+
+`fit_font` (from `ledmatrix.fonts`) finds the largest font size that fits – using the bundled
+[Inter](https://github.com/rsms/inter) font with full support for umlauts and accents.
 
 ---
 
@@ -248,14 +347,17 @@ Waveshare-P2.5-LED-Matrix/
 ├── src/ledmatrix/
 │   ├── __main__.py             entry point (python -m ledmatrix)
 │   ├── config.py               load and validate the config
+│   ├── fonts.py                font helpers (bundled Inter font)
 │   ├── renderer.py             output to the LED panels
 │   ├── scheduler.py            plays the modules one after another
 │   ├── modules/
-│   │   ├── base.py             base class for all modules
-│   │   └── clock.py            clock module
-│   └── preview/
-│       ├── renderer.py         web server for the browser preview
-│       └── index.html          preview page
+│   │   ├── base.py             base class for all modules (incl. translations)
+│   │   ├── clock.py            clock module
+│   │   └── christmas.py        Christmas countdown
+│   ├── preview/
+│   │   ├── renderer.py         web server for the browser preview
+│   │   └── index.html          preview page
+│   └── assets/fonts/           Inter font and its license
 └── pyproject.toml              project metadata and dependencies
 ```
 

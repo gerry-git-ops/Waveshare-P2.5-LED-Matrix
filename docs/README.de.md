@@ -12,11 +12,48 @@ Baue eigene Module – Uhren, Countdowns, Krypto-Ticker, Animationen – und las
 ![Panels](https://img.shields.io/badge/Panels-4%C3%97%2064%C3%9732-00b4d8)
 ![Status](https://img.shields.io/badge/Status-im%20Aufbau-orange)
 ![License](https://img.shields.io/badge/License-GPL--3.0-blue)
+![Sprachen](https://img.shields.io/badge/Sprachen-EN%20%C2%B7%20DE%20%C2%B7%20FR%20%C2%B7%20ES-8a2be2)
 
-<img src="images/matrix-clock-blue.jpg" width="49%" alt="Uhr-Modul mit Sekunden auf der LED-Matrix">
-<img src="images/matrix-clock-orange.jpg" width="49%" alt="Uhr-Modul ohne Sekunden auf der LED-Matrix">
+<img src="images/playlist.gif" width="100%" alt="Die Matrix spielt den Weihnachts-Countdown und zwei Uhren nacheinander ab">
+
+<sub>Echte Panels, echte Zeit: Weihnachts-Countdown und zwei Uhr-Varianten im Wechsel.</sub>
 
 </div>
+
+---
+
+## 🎄 Saison-Highlight: Weihnachts-Countdown
+
+Bring deine Matrix in Weihnachtsstimmung: eine funkelnde Lichterkette, ein Tannenbaum mit leuchtendem Stern,
+sanft fallender Schnee – und ein großer Countdown bis Heiligabend. An Heiligabend wechselt die Anzeige
+zu einem bunten Weihnachtsgruß, und nach den Feiertagen zählt sie von selbst auf das nächste Weihnachten hin.
+
+<div align="center">
+<img src="images/christmas.gif" width="100%" alt="Animierter Weihnachts-Countdown auf der LED-Matrix">
+</div>
+
+Er spricht deine Sprache – Englisch, Deutsch, Französisch und Spanisch sind eingebaut:
+
+<div align="center">
+<img src="images/christmas-en.jpg" width="49%" alt="Weihnachts-Countdown auf Englisch">
+<img src="images/christmas-de.jpg" width="49%" alt="Weihnachts-Countdown auf Deutsch">
+<img src="images/christmas-fr.jpg" width="49%" alt="Weihnachts-Countdown auf Französisch">
+<img src="images/christmas-es.jpg" width="49%" alt="Weihnachts-Countdown auf Spanisch">
+</div>
+
+In deine `config/config.yaml` eintragen:
+
+```yaml
+language: de                # en, de, fr, es
+
+modules:
+  - type: christmas
+    duration: 15
+    hour: 18                # Christmas Eve at 18:00, 0 = midnight
+    snow: 40                # number of snowflakes, 0 = no snow
+```
+
+Eigene Texte? Jeder Text lässt sich direkt in der Config ersetzen – siehe [Sprachen](#-sprachen).
 
 ---
 
@@ -155,12 +192,17 @@ hardware:
   brightness: 50            # 0-100
 
 fps: 30                     # frames per second
+language: en                # en, de, fr, es – missing texts fall back to English
 
 modules:                    # played in this order, then from the start
   - type: clock
     duration: 5             # seconds
     color: [0, 150, 255]
     fmt: "%H:%M:%S"
+
+  - type: christmas
+    duration: 15
+    hour: 18
 ```
 
 Die Anzeigegröße wird aus dem Hardware-Teil berechnet:
@@ -173,15 +215,43 @@ Die Anzeigegröße wird aus dem Hardware-Teil berechnet:
 Jeder Modul-Eintrag braucht einen `type` und optional eine `duration` (Sekunden).
 Alle weiteren Angaben bekommt das Modul als Optionen.
 
+### ✦ Sprachen
+
+`language` legt die Sprache für alle Module fest. Eingebaut sind **Englisch** (`en`), **Deutsch** (`de`),
+**Französisch** (`fr`) und **Spanisch** (`es`). Fehlt ein Text in deiner Sprache, wird Englisch genommen –
+es bricht also nichts.
+
+**Einzelne Texte ändern** geht direkt in der Config, ganz ohne Code. Einfach den Text-Schlüssel des Moduls verwenden:
+
+```yaml
+  - type: christmas
+    title: "Nur noch"       # statt "Weihnachten in"
+    done: "Ho ho ho!"       # statt "Frohe Weihnachten!"
+```
+
+| Modul | Text-Schlüssel |
+|-------|----------------|
+| `christmas` | `title`, `days`, `day`, `done` |
+
+**Deine Sprache fehlt?** Ergänze sie in den `texts` des Moduls (siehe
+[Eigenes Modul bauen](#-eigenes-modul-bauen)) und schick einen Pull Request – Beiträge sind sehr willkommen.
+
 ## ✦ Module
 
 | Modul | Beschreibung | Optionen | Status |
 |-------|--------------|----------|--------|
 | `clock` | Digitale Uhr, passt sich selbst an die Anzeige an | `color`, `fmt` ([strftime](https://docs.python.org/3/library/time.html#time.strftime)) | ✅ |
+| `christmas` | 🎄 Countdown bis Heiligabend mit Lichterkette, Baum und Schnee | `hour`, `snow`, [Texte](#-sprachen) | ✅ |
 | Lauftext | Text mit einstellbarer Geschwindigkeit | | geplant |
 | Countdown | Tage, Stunden, Minuten bis zu einem Datum | | geplant |
 | GIF-Player | Eigene Animationen abspielen | | geplant |
 | Krypto-Ticker | Kurse per Web-API, mit Verlauf | | Idee |
+
+<div align="center">
+<img src="images/matrix-clock-blue.jpg" width="49%" alt="Uhr-Modul mit Sekunden">
+<img src="images/matrix-clock-orange.jpg" width="49%" alt="Uhr-Modul ohne Sekunden">
+<br><sub>Zweimal dasselbe <code>clock</code>-Modul – nur <code>color</code> und <code>fmt</code> sind anders.</sub>
+</div>
 
 ## ✦ Eigenes Modul bauen
 
@@ -199,8 +269,8 @@ from ledmatrix.modules.base import Module
 
 
 class Bounce(Module):
-    def __init__(self, width: int, height: int, color=(255, 0, 80)) -> None:
-        super().__init__(width, height)
+    def __init__(self, width: int, height: int, color=(255, 0, 80), **kwargs) -> None:
+        super().__init__(width, height, **kwargs)
         self.color = tuple(color)
 
     def render(self, t: float) -> Image.Image:
@@ -235,6 +305,35 @@ Mit `python -m ledmatrix --preview` anschauen – fertig.
 > [!TIP]
 > Immer mit `self.width` und `self.height` rechnen, nie mit festen Zahlen –
 > dann läuft dein Modul auf jedem Panel-Aufbau.
+> `**kwargs` an `super().__init__()` weitergeben – darüber bekommt dein Modul die Sprache.
+
+### Texte in mehreren Sprachen
+
+Leg deine Texte in `texts` ab und hol sie mit `self.text(...)`:
+
+```python
+from PIL import Image, ImageDraw
+
+from ledmatrix.fonts import fit_font
+from ledmatrix.modules.base import Module
+
+
+class Greeting(Module):
+    texts = {
+        "en": {"hello": "Hello!"},
+        "de": {"hello": "Hallo!"},
+    }
+
+    def render(self, t: float) -> Image.Image:
+        img = Image.new("RGB", (self.width, self.height))
+        font = fit_font(self.text("hello"), self.width - 4, self.height - 4)
+        ImageDraw.Draw(img).text((self.width / 2, self.height / 2), self.text("hello"),
+                                 font=font, fill=(255, 255, 255), anchor="mm")
+        return img
+```
+
+`fit_font` (aus `ledmatrix.fonts`) sucht die größte Schriftgröße, die passt – mit der mitgelieferten
+Schrift [Inter](https://github.com/rsms/inter), die alle Umlaute und Akzente kann.
 
 ---
 
@@ -248,14 +347,17 @@ Waveshare-P2.5-LED-Matrix/
 ├── src/ledmatrix/
 │   ├── __main__.py             Startpunkt (python -m ledmatrix)
 │   ├── config.py               Config einlesen und prüfen
+│   ├── fonts.py                Schrift-Helfer (mitgelieferte Inter-Schrift)
 │   ├── renderer.py             Ausgabe auf die LED-Panels
 │   ├── scheduler.py            spielt die Module nacheinander ab
 │   ├── modules/
-│   │   ├── base.py             Basisklasse für alle Module
-│   │   └── clock.py            Uhr-Modul
-│   └── preview/
-│       ├── renderer.py         Webserver für die Browser-Vorschau
-│       └── index.html          Vorschau-Seite
+│   │   ├── base.py             Basisklasse für alle Module (inkl. Übersetzungen)
+│   │   ├── clock.py            Uhr-Modul
+│   │   └── christmas.py        Weihnachts-Countdown
+│   ├── preview/
+│   │   ├── renderer.py         Webserver für die Browser-Vorschau
+│   │   └── index.html          Vorschau-Seite
+│   └── assets/fonts/           Inter-Schrift und ihre Lizenz
 └── pyproject.toml              Projektbeschreibung und Abhängigkeiten
 ```
 

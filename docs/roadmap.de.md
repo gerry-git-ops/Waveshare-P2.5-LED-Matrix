@@ -42,8 +42,10 @@
 ## Phase 3 – Erste Module 🔜
 
 - [ ] Lauftext
-- [X] Uhr
-- [ ] Countdown
+- [x] Uhr
+- [x] Weihnachts-Countdown mit Lichterkette, Baum und Schnee 🎄
+- [x] Texte in mehreren Sprachen (en, de, fr, es)
+- [ ] Countdown zu einem beliebigen Datum
 - [ ] GIF-Player
 
 ## Phase 4 – Dauerbetrieb

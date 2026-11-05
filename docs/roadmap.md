@@ -43,7 +43,9 @@
 
 - [ ] Scrolling text
 - [x] Clock
-- [ ] Countdown
+- [x] Christmas countdown with garland, tree and snow 🎄
+- [x] Texts in several languages (en, de, fr, es)
+- [ ] Countdown to any date
 - [ ] GIF player
 
 ## Phase 4 – Running it for real
