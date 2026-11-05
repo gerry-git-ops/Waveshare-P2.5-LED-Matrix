@@ -1,0 +1,14 @@
+[project]
+name = "ledmatrix"
+version = "0.1.0"
+description = "Modular display system for HUB75 LED panels on a Raspberry Pi"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2",
+    "pyyaml>=6",
+    "pillow",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"

@@ -14,35 +14,35 @@
 
 ---
 
-## Phase 0 – Fundament
+## Phase 0 – Fundament ✅
 
 - [x] Raspberry Pi 4 startet von einer USB-Festplatte, ohne Desktop
 - [x] Entwicklung per SSH mit Schlüssel-Anmeldung
 - [x] Git und GitHub eingerichtet (SSH-Schlüssel, private Commit-Mail)
 - [x] Repo-Gerüst: README, Roadmap, `.gitignore`
 
-## Phase 1 – Hardware in Betrieb nehmen 🔜
+## Phase 1 – Hardware in Betrieb nehmen ✅
 
 - [x] [rpi-rgb-led-matrix](https://github.com/hzeller/rpi-rgb-led-matrix) installieren und Demo-Programme bauen
 - [x] Python-Anbindung der Bibliothek installieren
 - [x] Demo-Programme auf den Panels laufen lassen
 - [x] Panel-Reihenfolge prüfen (zwei parallele Ketten mit je zwei Panels)
 - [x] Farbreihenfolge korrigieren (diese Panels brauchen `RBG`)
-- [ ] `gpio_slowdown` und Helligkeit für ein flackerfreies Bild einstellen
+- [x] `gpio_slowdown` und Helligkeit für ein flackerfreies Bild einstellen
 
-## Phase 2 – Kern
+## Phase 2 – Kern 🔜
 
-- [ ] Renderer, der pro Frame ein Bild mit 128×64 Pixeln erzeugt
-- [ ] Modul-Schnittstelle (`render(t)`) und Modul-Lader
-- [ ] Scheduler: Reihenfolge und Dauer der Module
-- [ ] Konfiguration über `config.yaml` (mit Vorlage `config.example.yaml`)
-- [ ] Hardware-unabhängiger Aufbau: Panelgröße, Reihen, Kettenlänge und Verdrahtung nur in der `config.yaml`
+- [x] Renderer, der pro Frame ein Bild mit 128×64 Pixeln erzeugt
+- [x] Modul-Schnittstelle (`render(t)`) und Modul-Lader
+- [x] Scheduler: Reihenfolge und Dauer der Module
+- [x] Konfiguration über `config.yaml` (mit Vorlage `config.example.yaml`)
+- [x] Hardware-unabhängiger Aufbau: Panelgröße, Reihen, Kettenlänge und Verdrahtung nur in der `config.yaml`
 - [ ] Vorschau-Modus ohne Hardware, um Module am PC zu entwickeln
 
 ## Phase 3 – Erste Module
 
 - [ ] Lauftext
-- [ ] Uhr
+- [X] Uhr
 - [ ] Countdown
 - [ ] GIF-Player
 
