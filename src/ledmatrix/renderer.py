@@ -2,9 +2,18 @@
 
 from PIL import Image
 
+from typing import Protocol
 from ledmatrix.config import HardwareConfig
 
+class Renderer(Protocol):
+    """Anything that can show frames: the panels or the browser preview."""
 
+    width: int
+    height: int
+
+    def show(self, image: Image.Image) -> None: ...
+    def clear(self) -> None: ...
+    
 class MatrixRenderer:
     """Shows Pillow images on the panels via rpi-rgb-led-matrix."""
 

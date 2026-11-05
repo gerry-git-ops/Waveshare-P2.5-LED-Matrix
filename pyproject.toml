@@ -12,3 +12,6 @@ dependencies = [
 [build-system]
 requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-data]
+"ledmatrix.preview" = ["*.html"]

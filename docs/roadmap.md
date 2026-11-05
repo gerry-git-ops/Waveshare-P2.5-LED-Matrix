@@ -30,16 +30,16 @@
 - [x] Fix the color order (these panels need `RBG`)
 - [x] Tune `gpio_slowdown` and brightness for a flicker-free image
 
-## Phase 2 – Core 🔜
+## Phase 2 – Core ✅
 
 - [x] Renderer that produces one 128×64 image per frame
 - [x] Module interface (`render(t)`) and module loader
 - [x] Scheduler: order and duration of modules
 - [x] Configuration via `config.yaml` (plus a `config.example.yaml` template)
 - [x] Hardware-independent design: panel size, rows, chain length and wiring only in `config.yaml`
-- [ ] Preview mode without hardware, for developing modules on a PC
+- [x] Preview mode without hardware, for developing modules on a PC
 
-## Phase 3 – First modules
+## Phase 3 – First modules 🔜
 
 - [ ] Scrolling text
 - [x] Clock

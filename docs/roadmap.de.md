@@ -30,16 +30,16 @@
 - [x] Farbreihenfolge korrigieren (diese Panels brauchen `RBG`)
 - [x] `gpio_slowdown` und Helligkeit für ein flackerfreies Bild einstellen
 
-## Phase 2 – Kern 🔜
+## Phase 2 – Kern ✅
 
 - [x] Renderer, der pro Frame ein Bild mit 128×64 Pixeln erzeugt
 - [x] Modul-Schnittstelle (`render(t)`) und Modul-Lader
 - [x] Scheduler: Reihenfolge und Dauer der Module
 - [x] Konfiguration über `config.yaml` (mit Vorlage `config.example.yaml`)
 - [x] Hardware-unabhängiger Aufbau: Panelgröße, Reihen, Kettenlänge und Verdrahtung nur in der `config.yaml`
-- [ ] Vorschau-Modus ohne Hardware, um Module am PC zu entwickeln
+- [x] Vorschau-Modus ohne Hardware, um Module am PC zu entwickeln
 
-## Phase 3 – Erste Module
+## Phase 3 – Erste Module 🔜
 
 - [ ] Lauftext
 - [X] Uhr

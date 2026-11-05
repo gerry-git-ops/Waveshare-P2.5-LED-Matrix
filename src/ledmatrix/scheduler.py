@@ -3,13 +3,13 @@
 import time
 
 from ledmatrix.modules.base import Module
-from ledmatrix.renderer import MatrixRenderer
+from ledmatrix.renderer import Renderer
 
 
 class Scheduler:
     """Shows each module for its duration, then switches to the next."""
 
-    def __init__(self, renderer: MatrixRenderer, modules: list[Module],
+    def __init__(self, renderer: Renderer, modules: list[Module],
                  fps: int = 30) -> None:
         if not modules:
             raise ValueError("At least one module is required")
