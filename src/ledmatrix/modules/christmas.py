@@ -1,13 +1,14 @@
 """Christmas countdown with garland, tree and falling snow."""
 
 import math
-from ledmatrix.widgets.snow import Snow
 from datetime import datetime, timedelta
 
 from PIL import Image, ImageDraw
 
 from ledmatrix.fonts import fit_font
 from ledmatrix.modules.base import Module
+from ledmatrix.widgets.countdown import Countdown
+from ledmatrix.widgets.snow import Snow
 
 BULB_COLORS = [(255, 40, 40), (40, 220, 60), (255, 190, 0), (40, 120, 255), (230, 60, 230)]
 
@@ -43,8 +44,8 @@ class Christmas(Module):
         top = max(8, height // 8)  # room for the garland
         rows = height - top
         self.title_font = fit_font(self.title, text_w, rows // 5)
-        self.days_font = fit_font("000 " + self.days_label, text_w, rows // 2)
-        self.time_font = fit_font("00:00:00", text_w, rows // 4)
+        self.countdown = Countdown(text_w, rows - rows // 4, self._target(datetime.now()),
+                                    day=self.day_label, days=self.days_label)
         self.done_font = fit_font(self.done_text, text_w, rows // 3)
         self.rows_top = top
 
@@ -71,10 +72,9 @@ class Christmas(Module):
         if self.tree_w:
             self._draw_tree(draw, t)
 
-        now = datetime.now()
-        left = self._target(now) - now
-        if left.total_seconds() > 0:
-            self._draw_countdown(draw, left)
+        self.countdown.target = self._target(datetime.now())
+        if self.countdown.left().total_seconds() > 0:
+            self._draw_countdown(img, draw, t)
         else:
             self._draw_done(draw, t)
         return img
@@ -116,19 +116,12 @@ class Christmas(Module):
             if on:
                 draw.point((cx + dx, y), fill=BULB_COLORS[i % len(BULB_COLORS)])
 
-    def _draw_countdown(self, draw: ImageDraw.ImageDraw, left: timedelta) -> None:
+    def _draw_countdown(self, img: Image.Image, draw: ImageDraw.ImageDraw, t: float) -> None:
         cx = self.text_x + (self.width - self.text_x) / 2
         rows = self.height - self.rows_top
-        hours, rest = divmod(left.seconds, 3600)
-        minutes, seconds = divmod(rest, 60)
-
         draw.text((cx, self.rows_top + rows * 0.12), self.title, font=self.title_font,
                   fill=(255, 190, 0), anchor="mm")
-        label = self.day_label if left.days == 1 else self.days_label
-        draw.text((cx, self.rows_top + rows * 0.5), f"{left.days} {label}",
-                  font=self.days_font, fill=(255, 40, 40), anchor="mm")
-        draw.text((cx, self.rows_top + rows * 0.86), f"{hours:02}:{minutes:02}:{seconds:02}",
-                  font=self.time_font, fill=(230, 230, 230), anchor="mm")
+        self.countdown.draw(img, self.text_x, self.rows_top + rows // 4, t)
 
     def _draw_done(self, draw: ImageDraw.ImageDraw, t: float) -> None:
         cx = self.text_x + (self.width - self.text_x) / 2

@@ -6,6 +6,7 @@ from ledmatrix.modules.clock import Clock
 from ledmatrix.modules.christmas import Christmas
 from ledmatrix.modules.scrolltext import ScrollText
 from ledmatrix.modules.gif import GifPlayer
+from ledmatrix.modules.countdown import CountdownModule
 
 # name in config.yaml -> module class
 REGISTRY: dict[str, type[Module]] = {
@@ -13,6 +14,7 @@ REGISTRY: dict[str, type[Module]] = {
     "christmas": Christmas,
     "scrolltext": ScrollText,
     "gif": GifPlayer,
+    "countdown": CountdownModule,
 }
 
 def create_module(cfg: ModuleConfig, width: int, height: int,

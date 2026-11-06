@@ -42,3 +42,9 @@ modules:                    # played in this order, then from the start
     file: examples/star.gif
     fit: contain            # contain, cover or stretch
     loops: 3
+
+  - type: countdown
+    duration: 10
+    date: "2027-01-01 00:00"  # "YYYY-MM-DD" or "YYYY-MM-DD HH:MM"
+    # title: "Holiday in"     # optional, replaces the translated title
+    # done: "Have fun!"       # optional, shown once the date is reached
