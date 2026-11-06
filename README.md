@@ -78,6 +78,12 @@ in its wake and drops them into place: your trip details. Sky, clouds and waves 
     hold: 6                     # seconds the lines stay once they are complete
     palette: blue               # red, orange, gold, green, cyan, blue, purple, pink
     # ship: private/my_ship.png # optional, your own ship picture (transparent PNG)
+    finale:                     # optional: GIFs or pictures after the lines
+      - file: examples/star.gif   # a GIF without hold runs once
+      - file: examples/cruise_ship.png
+        hold: 3                   # a picture stays this many seconds
+    transition: fade            # fade or fade_black
+    transition_time: 1.5        # seconds, comes on top of the holds
 ```
 
 | Option | Meaning |
@@ -89,6 +95,31 @@ in its wake and drops them into place: your trip details. Sky, clouds and waves 
 | `palette` | color set for all texts: `red`, `orange`, `gold`, `green`, `cyan`, `blue`, `purple`, `pink` |
 | `title_color`, `days_color`, `time_color`, `line_colors` | single colors, they win over the palette |
 | `ship` | your own ship as a transparent PNG – default is the included `examples/cruise_ship.png` |
+| `finale` | list of GIFs or pictures shown after the trip details – each entry has `file`, optional `hold` (seconds) and `fit` (`contain`, `cover`, `stretch`) |
+| `transition` | how the parts of the finale blend into each other: `fade` or `fade_black` |
+| `transition_time` | seconds for each transition – they come on top, every part stays fully visible for its time |
+
+### Your own video as finale
+
+Turn any video **you are allowed to use** into a GIF that fits the matrix – with [ffmpeg](https://ffmpeg.org):
+
+```bash
+sudo apt install -y ffmpeg
+ffmpeg -ss 69 -to 84 -i private/my_video.mp4 \
+  -vf "fps=20,crop=iw*0.75:iw*0.375,eq=contrast=1.35:saturation=1.7:gamma=1.4,scale=128:64:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" \
+  private/clip.gif
+```
+
+| Part | What it does |
+|------|--------------|
+| `-ss 69 -to 84` | cut from second 69 to 84 |
+| `fps=20` | 20 frames per second are plenty for the panels and keep the file small |
+| `crop=iw*0.75:iw*0.375` | cut out the middle in the matrix ratio 2:1, 75 % of the video width – smaller values zoom in more |
+| `eq=…` | more contrast and color, lighter dark tones – they disappear on LEDs otherwise |
+| `scale=128:64` | your display size (`cols × chain_length` by `rows × parallel`) |
+| `palettegen` / `paletteuse` | picks the best 256 colors for this clip – no color stripes |
+
+Then add `- file: private/clip.gif` to the `finale`.
 
 > [!TIP]
 > **Need a different ship?** Use your own picture with `ship:` (keep pictures you are not allowed
@@ -514,6 +545,7 @@ Waveshare-P2.5-LED-Matrix/
 │   ├── fonts.py                font helpers (bundled Inter font)
 │   ├── renderer.py             output to the LED panels
 │   ├── scheduler.py            plays the modules one after another
+│   ├── transitions.py          blend one frame into another (fade, fade_black)
 │   ├── modules/
 │   │   ├── base.py             base class for all modules (incl. translations)
 │   │   ├── clock.py            clock module

@@ -51,11 +51,13 @@
 - [x] Widgets as reusable building blocks, sorted into folders (text, media, effects, scenery)
 - [x] Voyage countdown: ship, sea, sky and particle effects 🚢
 - [x] Color palettes for all texts
+- [x] Finale for the voyage module: own clips and pictures with transitions
 
 ## Phase 4 – Running it for real 🔜
 
 - [ ] Autostart as a systemd service
 - [ ] Brightness schedule (dimmer at night)
+- [ ] Brightness boost per module or finale part, on top of the current brightness (e.g. +25 % for videos)
 - [ ] Clean shutdown and restart on errors
 
 ## Phase 5 – Ideas 💡
@@ -63,7 +65,7 @@
 - [ ] Crypto ticker with price history
 - [ ] Weather module
 - [ ] Control and configuration from a web page
-- [ ] Transitions between modules
+- [ ] Transitions between modules (the blending itself is ready in `transitions.py`)
 - [ ] API interface (matrix on/off) for commands from external devices (e.g. Siemens S7)
 
 > 💡 **Missing something?** [Open an issue](https://github.com/gerry-git-ops/Waveshare-P2.5-LED-Matrix/issues/new) – ideas and module requests are welcome.

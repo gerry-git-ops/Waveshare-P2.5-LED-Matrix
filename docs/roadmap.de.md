@@ -51,11 +51,13 @@
 - [x] Widgets als wiederverwendbare Bausteine, in Ordnern sortiert (Text, Medien, Effekte, Kulisse)
 - [x] Reise-Countdown: Schiff, Meer, Himmel und Teilchen-Effekte 🚢
 - [x] Farbpaletten für alle Texte
+- [x] Finale für das Reise-Modul: eigene Clips und Bilder mit Übergängen
 
 ## Phase 4 – Dauerbetrieb 🔜
 
 - [ ] Autostart als systemd-Dienst
 - [ ] Helligkeitsplan (nachts dunkler)
+- [ ] Helligkeits-Zuschlag pro Modul oder Finale-Teil, auf die aktuelle Helligkeit drauf (z. B. +25 % für Videos)
 - [ ] Sauberes Beenden und Neustart bei Fehlern
 
 ## Phase 5 – Ideen 💡
@@ -63,7 +65,7 @@
 - [ ] Krypto-Ticker mit Kursverlauf
 - [ ] Wetter-Modul
 - [ ] Steuerung und Einstellungen über eine Webseite
-- [ ] Übergänge zwischen den Modulen
+- [ ] Übergänge zwischen den Modulen (das Überblenden selbst ist in `transitions.py` schon fertig)
 - [ ] API-Schnittstelle (Matrix an/aus) für Befehle von externen Geräten (z.B. Siemens S7)
 
 > 💡 **Dir fehlt etwas?** [Eröffne ein Issue](https://github.com/gerry-git-ops/Waveshare-P2.5-LED-Matrix/issues/new) – Ideen und Modulwünsche sind willkommen.

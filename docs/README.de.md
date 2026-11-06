@@ -79,6 +79,12 @@ Wellen bewegen sich die ganze Zeit.
     hold: 6                     # Sekunden, die die Zeilen stehen bleiben
     palette: blue               # red, orange, gold, green, cyan, blue, purple, pink
     # ship: private/my_ship.png # optional, eigenes Schiffsbild (PNG mit Transparenz)
+    finale:                     # optional: GIFs oder Bilder nach den Zeilen
+      - file: examples/star.gif   # ein GIF ohne hold läuft einmal durch
+      - file: examples/cruise_ship.png
+        hold: 3                   # ein Bild steht so viele Sekunden
+    transition: fade            # fade oder fade_black
+    transition_time: 1.5        # Sekunden, kommen zu den hold-Zeiten dazu
 ```
 
 | Option | Bedeutung |
@@ -90,6 +96,31 @@ Wellen bewegen sich die ganze Zeit.
 | `palette` | Farbset für alle Texte: `red`, `orange`, `gold`, `green`, `cyan`, `blue`, `purple`, `pink` |
 | `title_color`, `days_color`, `time_color`, `line_colors` | einzelne Farben, sie gehen vor der Palette |
 | `ship` | dein eigenes Schiff als PNG mit Transparenz – Standard ist das mitgelieferte `examples/cruise_ship.png` |
+| `finale` | Liste von GIFs oder Bildern nach den Reisedaten – jeder Eintrag hat `file`, optional `hold` (Sekunden) und `fit` (`contain`, `cover`, `stretch`) |
+| `transition` | wie die Teile des Finales ineinander übergehen: `fade` oder `fade_black` |
+| `transition_time` | Sekunden pro Übergang – sie kommen obendrauf, jeder Teil steht seine volle Zeit |
+
+### Eigenes Video als Finale
+
+Jedes Video, **das du verwenden darfst**, lässt sich mit [ffmpeg](https://ffmpeg.org) in ein passendes GIF umwandeln:
+
+```bash
+sudo apt install -y ffmpeg
+ffmpeg -ss 69 -to 84 -i private/my_video.mp4 \
+  -vf "fps=20,crop=iw*0.75:iw*0.375,eq=contrast=1.35:saturation=1.7:gamma=1.4,scale=128:64:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" \
+  private/clip.gif
+```
+
+| Teil | Was er macht |
+|------|--------------|
+| `-ss 69 -to 84` | Ausschnitt von Sekunde 69 bis 84 |
+| `fps=20` | 20 Bilder pro Sekunde reichen auf den Panels und halten die Datei klein |
+| `crop=iw*0.75:iw*0.375` | schneidet die Mitte im Seitenverhältnis 2:1 der Matrix aus, 75 % der Videobreite – kleinere Werte zoomen weiter heran |
+| `eq=…` | mehr Kontrast und Farbe, hellere dunkle Töne – die gehen auf LEDs sonst unter |
+| `scale=128:64` | deine Displaygröße (`cols × chain_length` mal `rows × parallel`) |
+| `palettegen` / `paletteuse` | sucht die 256 besten Farben für genau diesen Clip – keine Farbstreifen |
+
+Danach `- file: private/clip.gif` ins `finale` eintragen.
 
 > [!TIP]
 > **Du brauchst ein anderes Schiff?** Nimm dein eigenes Bild mit `ship:` (Bilder, die du nicht
@@ -515,6 +546,7 @@ Waveshare-P2.5-LED-Matrix/
 │   ├── fonts.py                Schrift-Helfer (mitgelieferte Inter-Schrift)
 │   ├── renderer.py             Ausgabe auf die LED-Panels
 │   ├── scheduler.py            spielt die Module nacheinander ab
+│   ├── transitions.py          Übergänge zwischen zwei Bildern (fade, fade_black)
 │   ├── modules/
 │   │   ├── base.py             Basisklasse für alle Module (inkl. Übersetzungen)
 │   │   ├── clock.py            Uhr-Modul
