@@ -87,6 +87,10 @@ class Voyage(Module):
         self.finale: list[tuple[float, float, Gif, bool]] = []   # start, length, picture, play once
         end = self.duration                                      # end of the trip lines
         for item in finale or []:
+            unknown = set(item) - {"file", "fit", "hold"}
+            if unknown:
+                raise ValueError(f"Unknown finale option(s): {', '.join(sorted(unknown))}. "
+                                 "Allowed: file, fit, hold")
             gif = Gif(width, height, item["file"], fit=item.get("fit", "contain"))
             animated = len(gif.frames) > 1
             once = animated and "hold" not in item                # a clip without hold runs once

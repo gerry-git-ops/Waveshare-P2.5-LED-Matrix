@@ -64,5 +64,5 @@ modules:                    # played in this order, then from the start
       - file: examples/star.gif   # a GIF without hold runs once
       - file: examples/cruise_ship.png
         hold: 3                   # a picture stays this many seconds
-        transition: fade            # fade or fade_black
-        transition_time: 1.5        # seconds, comes on top of the holds
+    transition: fade            # fade or fade_black
+    transition_time: 1.5        # seconds, comes on top of the holds
