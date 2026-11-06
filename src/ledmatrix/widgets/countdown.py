@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from PIL import Image, ImageDraw
 
-from ledmatrix.fonts import fit_font
+from ledmatrix.fonts import draw_fixed, fit_font
 from ledmatrix.widgets.base import Widget
 
 
@@ -22,8 +22,8 @@ class Countdown(Widget):
         self.days_color = tuple(days_color)
         self.time_color = tuple(time_color)
         # days row gets two thirds of the height, time row one third
-        self.days_font = fit_font("000 " + days, width, height * 2 // 3)
-        self.time_font = fit_font("00:00:00", width, height // 3)
+        self.days_font = fit_font("000 " + days, width, height * 2 // 3, fixed=True)
+        self.time_font = fit_font("00:00:00", width, height // 3, fixed=True)
 
     def left(self) -> timedelta:
         """Time left until the target (negative once it is reached)."""
@@ -37,7 +37,7 @@ class Countdown(Widget):
 
         draw = ImageDraw.Draw(img)
         cx = x + self.width / 2
-        draw.text((cx, y + self.height * 0.33), f"{left.days} {label}",
-                  font=self.days_font, fill=self.days_color, anchor="mm")
-        draw.text((cx, y + self.height * 0.83), f"{hours:02}:{minutes:02}:{seconds:02}",
-                  font=self.time_font, fill=self.time_color, anchor="mm")
+        draw_fixed(draw, (cx, y + self.height * 0.33), f"{left.days} {label}",
+                   self.days_font, self.days_color)
+        draw_fixed(draw, (cx, y + self.height * 0.83), f"{hours:02}:{minutes:02}:{seconds:02}",
+                   self.time_font, self.time_color)

@@ -4,7 +4,7 @@ import time
 
 from PIL import Image, ImageDraw
 
-from ledmatrix.fonts import fit_font
+from ledmatrix.fonts import draw_fixed, fit_font
 from ledmatrix.modules.base import Module
 
 
@@ -18,12 +18,11 @@ class Clock(Module):
         super().__init__(width, height, **kwargs)
         self.color = tuple(color)
         self.fmt = fmt
-        self.font = fit_font(time.strftime(fmt), width - 4, height - 4)
+        self.font = fit_font(time.strftime(fmt), width - 4, height - 4, fixed=True)
 
     def render(self, t: float) -> Image.Image:
         img = Image.new("RGB", (self.width, self.height))
         draw = ImageDraw.Draw(img)
         text = time.strftime(self.fmt)
-        draw.text((self.width / 2, self.height / 2), text,
-                  font=self.font, fill=self.color, anchor="mm")
+        draw_fixed(draw, (self.width / 2, self.height / 2), text, self.font, self.color)
         return img
