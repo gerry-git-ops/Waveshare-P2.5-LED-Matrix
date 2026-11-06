@@ -64,7 +64,8 @@
 
 - [ ] Krypto-Ticker mit Kursverlauf
 - [ ] Wetter-Modul
-- [ ] Steuerung und Einstellungen über eine Webseite
+- [x] Web-Oberfläche: Live-Bild, laufendes Modul, Module und Hardware, Hell/Dunkel
+- [ ] Einstellungen über die Webseite ändern (Module an/aus, Helligkeit, Optionen, Uploads)
 - [ ] Übergänge zwischen den Modulen (das Überblenden selbst ist in `transitions.py` schon fertig)
 - [ ] API-Schnittstelle (Matrix an/aus) für Befehle von externen Geräten (z.B. Siemens S7)
 

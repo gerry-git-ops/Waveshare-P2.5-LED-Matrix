@@ -64,7 +64,8 @@
 
 - [ ] Crypto ticker with price history
 - [ ] Weather module
-- [ ] Control and configuration from a web page
+- [x] Web interface: live picture, running module, modules and hardware, light/dark design
+- [ ] Change settings from the web page (modules on/off, brightness, options, uploads)
 - [ ] Transitions between modules (the blending itself is ready in `transitions.py`)
 - [ ] API interface (matrix on/off) for commands from external devices (e.g. Siemens S7)
 

@@ -142,24 +142,55 @@ flowchart LR
     A[Modules<br/>Clock · Countdown · Crypto · GIF …] --> B[Scheduler<br/>order & duration]
     E[config.yaml] --> A
     E --> B
-    B --> C{Renderer}
+    B --> C{Frame hub}
     C --> D[LED panels<br/>via rpi-rgb-led-matrix]
-    C --> F[Browser preview<br/>no hardware needed]
+    C --> F[Web interface<br/>live picture · status · no hardware needed]
 ```
 
-## ✦ Preview mode
+## ✦ Web interface
 
-Develop and test modules **without any panels** – the preview draws the matrix as
-glowing LEDs in your browser, live at 30 fps.
+Watch your matrix from any browser in your home network – PC, tablet or phone.
+It runs next to the panels, or completely **without any hardware**.
 
 <div align="center">
-<img src="docs/images/preview.gif" width="100%" alt="Browser preview showing the clock modules">
+<img src="docs/images/web-live.png" width="100%" alt="Web interface: live picture of the matrix and the module on screen">
+<img src="docs/images/web-modules.png" width="49%" alt="Web interface: all modules with their options">
+<img src="docs/images/web-hardware.png" width="49%" alt="Web interface: hardware in the light design">
 </div>
 
-- Adjustable size, LED size, glow and LED shape (round or square)
-- Shows the pixel coordinate under the mouse – handy when building modules
-- Screenshot button, fullscreen with <kbd>F</kbd>, hide the controls with <kbd>H</kbd>
-- Runs on the Pi as well as on any PC with Python
+- **Live** – the picture on the panels as glowing LEDs: LED size, glow, round or square LEDs,
+  screenshot, fullscreen and the pixel coordinate under the mouse
+- **On screen now** – which module is running, how long it still takes, real frames per second
+- **Modules** – every module of your config, on or off, with its options (colors as swatches)
+- **Hardware** – display size, panels, chains, brightness and wiring at a glance
+- **Design** – system, light or dark; the texts follow `language` (en, de, fr, es)
+- **API** – JSON at `/api/status`, `/api/config`, `/api/modules`, documented at `/api/docs`
+
+The web interface is **optional**: install it with `pip install -e ".[web]"`,
+switch it off with `web: {enabled: false}` in the config.
+
+> [!IMPORTANT]
+> The web interface has **no password** and is meant for your **home network**.
+> From outside, use a **VPN** (for example the one of your router) –
+> **never** open a port for it in your router.
+
+### Try it without hardware
+
+No Pi, no panels? Everything runs on your PC (Windows, macOS, Linux) – modules, timing and the
+web interface, exactly like on the Pi. Only no panels are driven. Perfect for building your own
+modules before you buy anything. You need Python 3.11 or newer.
+
+```bash
+git clone https://github.com/gerry-git-ops/Waveshare-P2.5-LED-Matrix.git
+cd Waveshare-P2.5-LED-Matrix
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -e ".[web]"
+cp config/config.example.yaml config/config.yaml   # Windows: copy config\config.example.yaml config\config.yaml
+ledmatrix-preview
+```
+
+Then open <http://localhost:8080>.
 
 ---
 
@@ -199,7 +230,8 @@ python3 -m venv --system-site-packages .venv
 source .venv/bin/activate
 
 pip install ~/rpi-rgb-led-matrix   # Python bindings of the LED library (takes a few minutes)
-pip install -e .                   # this project
+pip install -e ".[web]"            # this project with web interface
+# or: pip install -e .             # without web interface
 ```
 
 ### 5 · Configuration
@@ -213,36 +245,17 @@ Adjust `config/config.yaml` to your panels – see [Configuration](#-configurati
 ### 6 · Run
 
 ```bash
-sudo .venv/bin/python -m ledmatrix          # on the LED panels (needs root for GPIO)
-python -m ledmatrix --preview               # in the browser: http://localhost:8080
+sudo .venv/bin/python -m ledmatrix          # panels + web interface (needs root for GPIO)
 ```
 
+Open the [web interface](#-web-interface) at `http://<IP of your Pi>:8080` – the IP is shown by `hostname -I`.
 Stop with <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 
 > [!TIP]
 > Working on the Pi over **VS Code Remote-SSH**? VS Code forwards port 8080 automatically –
 > just click *Open in Browser*. With plain SSH: `ssh -L 8080:localhost:8080 user@your-pi`
 
-<details>
-<summary><b>Preview on a PC (Windows, macOS, Linux) – no Pi needed</b></summary>
-
-<br>
-
-You need Python 3.11 or newer. The LED library is **not** required for the preview.
-
-```bash
-git clone https://github.com/gerry-git-ops/Waveshare-P2.5-LED-Matrix.git
-cd Waveshare-P2.5-LED-Matrix
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -e .
-cp config/config.example.yaml config/config.yaml   # Windows: copy config\config.example.yaml config\config.yaml
-python -m ledmatrix --preview
-```
-
-Then open <http://localhost:8080>.
-
-</details>
+> No Pi yet? See [Try it without hardware](#try-it-without-hardware).
 
 ---
 
@@ -264,6 +277,10 @@ hardware:
 
 fps: 30                     # frames per second
 language: en                # en, de, fr, es – missing texts fall back to English
+
+web:                        # optional, these are the defaults
+  enabled: true             # web interface (needs: pip install -e ".[web]")
+  port: 8080
 
 modules:                    # played in this order, then from the start
   - type: clock
@@ -560,9 +577,11 @@ Waveshare-P2.5-LED-Matrix/
 │   │   ├── media/              images and animations – GIF
 │   │   ├── scenery/            backgrounds – sky, water
 │   │   └── text/               text – scrolling text, countdown
-│   ├── preview/
-│   │   ├── renderer.py         web server for the browser preview
-│   │   └── index.html          preview page
+│   ├── web/                    web interface (optional extra)
+│   │   ├── hub.py              passes every frame to the panels and the browser
+│   │   ├── api.py              JSON API and live stream (FastAPI)
+│   │   ├── server.py           starts the web server next to the display
+│   │   └── static/             the page: HTML, CSS, JavaScript
 │   └── assets/fonts/           Inter font and its license
 └── pyproject.toml              project metadata and dependencies
 ```
@@ -597,6 +616,13 @@ Use `pip install ~/rpi-rgb-led-matrix` inside the activated virtual environment.
 
 <br>The virtual environment is not active – run `source .venv/bin/activate`.
 With `sudo`, always use the Python of the venv: `sudo .venv/bin/python -m ledmatrix`.
+</details>
+
+<details>
+<summary><code>The web interface needs the web extra</code> or the page does not open</summary>
+
+<br>Install the extra: `pip install -e ".[web]"`. Your PC or phone must be in the same network as the Pi –
+use the IP from `hostname -I` and the port from the config (default 8080).
 </details>
 
 <details>
