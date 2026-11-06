@@ -48,3 +48,15 @@ modules:                    # played in this order, then from the start
     date: "2027-01-01 00:00"  # "YYYY-MM-DD" or "YYYY-MM-DD HH:MM"
     # title: "Holiday in"     # optional, replaces the translated title
     # done: "Have fun!"       # optional, shown once the date is reached
+
+  - type: voyage
+    date: "2027-06-01 00:00"    # departure: "YYYY-MM-DD" or "YYYY-MM-DD HH:MM"
+    lines:                      # shown after the ship, 1-4 lines
+      - "My Cruise"
+      - "Caribbean"
+      - "Miami - Miami"
+    ship_speed: 1.0             # 2.0 = twice as fast, 0.5 = half as fast
+    hold: 6                     # seconds the lines stay once they are complete
+    palette: blue               # red, orange, gold, green, cyan, blue, purple, pink
+    # ship: private/my_ship.png # optional, your own ship picture (transparent PNG)
+    # title: "Holiday in"       # optional, replaces the translated title
