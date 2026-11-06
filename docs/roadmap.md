@@ -48,7 +48,9 @@
 - [x] Texts in several languages (en, de, fr, es)
 - [x] Countdown to any date
 - [x] GIF player with example GIF
-- [x] Widgets as reusable building blocks (scrolling text, GIF, snow, countdown)
+- [x] Widgets as reusable building blocks, sorted into folders (text, media, effects, scenery)
+- [x] Voyage countdown: ship, sea, sky and particle effects 🚢
+- [x] Color palettes for all texts
 
 ## Phase 4 – Running it for real 🔜
 

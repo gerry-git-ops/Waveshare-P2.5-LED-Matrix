@@ -48,7 +48,9 @@
 - [x] Texte in mehreren Sprachen (en, de, fr, es)
 - [x] Countdown zu einem beliebigen Datum
 - [x] GIF-Player mit Beispiel-GIF
-- [x] Widgets als wiederverwendbare Bausteine (Lauftext, GIF, Schnee, Countdown)
+- [x] Widgets als wiederverwendbare Bausteine, in Ordnern sortiert (Text, Medien, Effekte, Kulisse)
+- [x] Reise-Countdown: Schiff, Meer, Himmel und Teilchen-Effekte 🚢
+- [x] Farbpaletten für alle Texte
 
 ## Phase 4 – Dauerbetrieb 🔜
 

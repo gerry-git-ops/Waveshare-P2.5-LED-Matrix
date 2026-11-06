@@ -57,6 +57,47 @@ Eigene Texte? Jeder Text lässt sich direkt in der Config ersetzen – siehe [Sp
 
 ---
 
+## 🚢 Highlight: Reise-Countdown
+
+Du zählst die Tage bis zur nächsten Reise? Am Horizont taucht ein Schiff auf, kommt näher und
+kracht mitten in den Countdown – die Zeit zerspringt in hunderte Pixel. Das Schiff zieht sie in
+seinem Kielwasser mit und lässt sie an ihren Platz fallen: deine Reisedaten. Himmel, Wolken und
+Wellen bewegen sich die ganze Zeit.
+
+<div align="center">
+<img src="images/voyage.gif" width="100%" alt="Reise-Countdown: Ein Schiff kracht in den Countdown und zieht die Reisedaten an ihren Platz">
+</div>
+
+```yaml
+  - type: voyage
+    date: "2027-06-01 00:00"    # Abfahrt: "JJJJ-MM-TT" oder "JJJJ-MM-TT HH:MM"
+    lines:                      # erscheinen nach dem Schiff, 1-4 Zeilen
+      - "Meine Kreuzfahrt"
+      - "Karibik"
+      - "Miami - Miami"
+    ship_speed: 1.0             # 2.0 = doppelt so schnell, 0.5 = halb so schnell
+    hold: 6                     # Sekunden, die die Zeilen stehen bleiben
+    palette: blue               # red, orange, gold, green, cyan, blue, purple, pink
+    # ship: private/my_ship.png # optional, eigenes Schiffsbild (PNG mit Transparenz)
+```
+
+| Option | Bedeutung |
+|--------|-----------|
+| `date` | Abfahrt – bis dahin läuft der Countdown |
+| `lines` | deine Reisedaten nach dem Schiff, 1–4 Zeilen |
+| `ship_speed` | Tempo des Schiffs – die ganze Szene wird damit kürzer oder länger |
+| `hold` | Sekunden, die die Reisedaten stehen bleiben |
+| `palette` | Farbset für alle Texte: `red`, `orange`, `gold`, `green`, `cyan`, `blue`, `purple`, `pink` |
+| `title_color`, `days_color`, `time_color`, `line_colors` | einzelne Farben, sie gehen vor der Palette |
+| `ship` | dein eigenes Schiff als PNG mit Transparenz – Standard ist das mitgelieferte `examples/cruise_ship.png` |
+
+> [!TIP]
+> **Du brauchst ein anderes Schiff?** Nimm dein eigenes Bild mit `ship:` (Bilder, die du nicht
+> weitergeben darfst, gehören nach `private/`) – oder [eröffne ein Issue](https://github.com/gerry-git-ops/Waveshare-P2.5-LED-Matrix/issues/new)
+> und beschreib das Schiff, das du sehen möchtest.
+
+---
+
 ## ✦ Idee
 
 Kein einzelnes Skript, sondern eine kleine Plattform: Das System kümmert sich um Hardware,
@@ -239,6 +280,7 @@ es bricht also nichts.
 |-------|----------------|
 | `christmas` | `title`, `days`, `day`, `done` |
 | `countdown` | `title`, `days`, `day`, `done` |
+| `voyage` | `title`, `days`, `day`, `trip` (Endzeile, wenn keine `lines` gesetzt sind) |
 | `scrolltext` | `text` |
 
 **Deine Sprache fehlt?** Ergänze sie in den `texts` des Moduls (siehe
@@ -253,6 +295,7 @@ es bricht also nichts.
 | `scrolltext` | Lauftext in einer Farbe oder im Regenbogen, läuft eine festgelegte Anzahl Mal durch | `loops`, `speed`, `size`, `color`, `rainbow`, [`text`](#-sprachen) | ✅ |
 | `countdown` | Tage und Zeit bis zu einem beliebigen Datum, danach ein eigener Text | `date`, `title_color`, `days_color`, `time_color`, [Texte](#-sprachen) | ✅ |
 | `gif` | Spielt ein animiertes GIF eine festgelegte Anzahl Mal ab | `file`, `fit`, `speed`, `loops` | ✅ |
+| `voyage` | 🚢 Ein Schiff kracht in den Countdown und zieht deine Reisedaten an ihren Platz | [siehe oben](#-highlight-reise-countdown) | ✅ |
 | Krypto-Ticker | Kurse per Web-API, mit Verlauf | | Idee |
 
 <div align="center">
@@ -319,9 +362,13 @@ in einen *Bereich* zeichnen, den du ihnen vorgibst. Ein Modul setzt sie nur noch
 | `Gif` | ein animiertes GIF oder ein Standbild | `path`, `fit`, `speed` |
 | `Snow` | fallende Schneeflocken | `count`, `color` |
 | `Countdown` | Tage und Zeit bis zu einem Zeitpunkt | `target`, `day`, `days`, `days_color`, `time_color` |
+| `Sky` | Himmel mit Farbverlauf und ziehenden Wolken | `clouds`, `top`, `bottom` |
+| `Water` | Wasser mit laufenden Wellen | `back`, `front` |
+| `Particles` | lässt ein Bild in Pixel zerspringen und setzt sie zu einem anderen zusammen | `gravity`, `drag` |
 
 Auch die eingebauten Module bestehen daraus: `scrolltext` ist ein `ScrollingText`,
-`gif` ist ein `Gif`, `countdown` ist ein `Countdown`, und `christmas` nutzt `Snow` und `Countdown`.
+`gif` ist ein `Gif`, `countdown` ist ein `Countdown`, `christmas` nutzt `Snow` und `Countdown`,
+und `voyage` setzt `Sky`, `Water`, `Countdown` und `Particles` zusammen.
 
 Beispiel – ein Stern mit Schneefall und ein Regenbogen-Text in der unteren Zeile:
 
@@ -460,9 +507,10 @@ Waveshare-P2.5-LED-Matrix/
 ├── config/
 │   └── config.example.yaml     Vorlage für deine config.yaml
 ├── docs/                       Übersetzungen, Roadmap, Bilder
-├── examples/                   Beispieldateien, z. B. star.gif
+├── examples/                   Beispieldateien: star.gif, cruise_ship.png
 ├── src/ledmatrix/
 │   ├── __main__.py             Startpunkt (python -m ledmatrix)
+│   ├── colors.py               Farbpaletten
 │   ├── config.py               Config einlesen und prüfen
 │   ├── fonts.py                Schrift-Helfer (mitgelieferte Inter-Schrift)
 │   ├── renderer.py             Ausgabe auf die LED-Panels
@@ -473,11 +521,13 @@ Waveshare-P2.5-LED-Matrix/
 │   │   ├── christmas.py        Weihnachts-Countdown
 │   │   ├── countdown.py        Countdown zu einem beliebigen Datum
 │   │   ├── gif.py              GIF-Player
-│   │   └── scrolltext.py       Lauftext
+│   │   ├── scrolltext.py       Lauftext
+│   │   └── voyage.py           Reise-Countdown mit Schiff
 │   ├── widgets/                Bausteine für Module
 │   │   ├── base.py             Basisklasse für alle Widgets
-│   │   ├── effects/            bewegte Effekte – Schnee
+│   │   ├── effects/            bewegte Effekte – Schnee, Teilchen
 │   │   ├── media/              Bilder und Animationen – GIF
+│   │   ├── scenery/            Hintergründe – Himmel, Wasser
 │   │   └── text/               Text – Lauftext, Countdown
 │   ├── preview/
 │   │   ├── renderer.py         Webserver für die Browser-Vorschau
