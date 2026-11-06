@@ -1,2 +1,11 @@
-# Language statistics: count the project as Python
-src/ledmatrix/preview/*.html linguist-detectable=false
+# Line endings: always LF in the repository, also when committing from Windows
+* text=auto eol=lf
+
+# Pictures and fonts are binary, never compare or merge them as text
+*.png binary
+*.jpg binary
+*.gif binary
+*.otf binary
+
+# Show the Python function or class of every change in diffs
+*.py diff=python
