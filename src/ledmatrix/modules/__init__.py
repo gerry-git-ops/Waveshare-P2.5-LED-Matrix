@@ -20,7 +20,7 @@ REGISTRY: dict[str, type[Module]] = {
 }
 
 def create_module(cfg: ModuleConfig, width: int, height: int,
-                  language: str = "en") -> Module:
+                  language: str = "en", index: int = -1) -> Module:
     """Build one module from its config entry."""
     try:
         cls = REGISTRY[cfg.type]
@@ -36,4 +36,6 @@ def create_module(cfg: ModuleConfig, width: int, height: int,
     module = cls(width, height, language=language, overrides=overrides, **options)
     if cfg.duration is not None:
         module.duration = cfg.duration
+        module.name = cfg.type
+        module.config_index = index
     return module

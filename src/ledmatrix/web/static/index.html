@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LED Matrix</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><circle cx='8' cy='8' r='6' fill='%23a3e635'/></svg>">
+<link rel="stylesheet" href="/static/style.css">
+<script>
+  // set the design before the page is drawn, so it does not flash
+  const mode = localStorage.getItem("ledmatrix-theme") || "system";
+  const dark = mode === "dark" || (mode === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.className = dark ? "dark" : "light";
+</script>
+</head>
+<body>
+<div class="layout">
+
+  <header class="header">
+    <div class="logo"><span class="logo-icon">✦</span> LED Matrix</div>
+    <div class="header-right">
+      <span class="badge" id="mode">…</span>
+      <label class="label" for="theme" data-t="design">Design</label>
+      <select id="theme" class="theme-select">
+        <option value="system" data-t="system">System</option>
+        <option value="light" data-t="light">Light</option>
+        <option value="dark" data-t="dark">Dark</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="card">
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="live">📺 <span data-t="live">Live</span></button>
+      <button class="tab" data-tab="modules">🧩 <span data-t="modules">Modules</span></button>
+      <button class="tab" data-tab="hardware">⚙️ <span data-t="hardware">Hardware</span></button>
+    </nav>
+
+    <!-- LIVE -->
+    <section class="page active" id="page-live">
+      <div class="now">
+        <div>
+          <div class="label" data-t="now">On screen now</div>
+          <div class="now-name" id="now-name">–</div>
+        </div>
+        <div class="now-right">
+          <span class="chip"><span class="dot" id="dot"></span><span id="conn">…</span></span>
+          <span class="chip" id="fps">– fps</span>
+          <span class="chip" id="pos"></span>
+        </div>
+      </div>
+      <div class="progress"><div id="progress"></div></div>
+
+      <div class="screen-wrap" id="screen-wrap">
+        <div class="bezel"><canvas id="screen"></canvas></div>
+      </div>
+
+      <div class="toolbar">
+        <div class="ctl"><span data-t="size">Size</span>
+          <div class="seg" id="fit"><button data-v="fit">Fit</button><button data-v="fixed">Fixed</button></div>
+          <input type="range" id="scale" min="2" max="24" step="1">
+        </div>
+        <div class="ctl">LED <input type="range" id="dot_size" min="0.3" max="1" step="0.05"></div>
+        <div class="ctl">Glow <input type="range" id="glow" min="0" max="1" step="0.05"></div>
+        <div class="ctl"><div class="seg" id="shape"><button data-v="round">●</button><button data-v="square">■</button></div></div>
+        <div class="ctl"><div class="seg" id="unlit"><button data-v="on" data-t="unlit">Unlit LEDs</button></div></div>
+        <button class="button" id="snap" data-t="screenshot">Screenshot</button>
+        <button class="button" id="full" data-t="fullscreen">Fullscreen</button>
+      </div>
+    </section>
+
+    <!-- MODULES -->
+    <section class="page" id="page-modules">
+      <h2 class="card-title" data-t="modules">Modules</h2>
+      <div class="grid" id="module-list"></div>
+    </section>
+
+    <!-- HARDWARE -->
+    <section class="page" id="page-hardware">
+      <h2 class="card-title" data-t="hardware">Hardware</h2>
+      <div class="grid" id="hardware-list"></div>
+    </section>
+  </main>
+
+</div>
+<script src="/static/led.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

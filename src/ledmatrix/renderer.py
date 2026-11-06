@@ -1,4 +1,5 @@
 """Send finished frames to the LED panels."""
+import os
 
 from PIL import Image
 
@@ -30,6 +31,15 @@ class MatrixRenderer:
         options.gpio_slowdown = hw.gpio_slowdown
         options.led_rgb_sequence = hw.rgb_sequence
         options.brightness = hw.brightness
+        
+        # After start the library gives up its root rights. Started with sudo, it
+        # becomes the user who called sudo (instead of "daemon"), so the program
+        # can still read your files - and later save the config.
+        user = os.environ.get("SUDO_USER")
+        if user:
+            import grp, pwd   # only on Linux, that is why they are imported here
+            options.drop_priv_user = user
+            options.drop_priv_group = grp.getgrgid(pwd.getpwnam(user).pw_gid).gr_name
 
         self._matrix = RGBMatrix(options=options)
         self._canvas = self._matrix.CreateFrameCanvas()

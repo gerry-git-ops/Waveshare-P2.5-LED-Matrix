@@ -16,14 +16,31 @@ class Scheduler:
         self.renderer = renderer
         self.modules = modules
         self.frame_time = 1 / fps
+                # what is on screen right now, read by the web interface
+        self.index = 0
+        self.started = time.monotonic()
+        self.fps = 0.0
+
+    def status(self) -> dict:
+        """The module on screen, how long it has been running and the real frame rate."""
+        module = self.modules[self.index]
+        elapsed = time.monotonic() - self.started
+        return {
+            "module": module.name,
+            "config_index": module.config_index,
+            "elapsed": round(elapsed, 1),
+            "remaining": round(max(0.0, module.duration - elapsed), 1),
+            "duration": round(module.duration, 1),
+            "fps": round(self.fps, 1),
+        }
 
     def run(self) -> None:
         """Loop forever (stop with Ctrl+C)."""
-        index = 0
         while True:
-            module = self.modules[index]
+            module = self.modules[self.index]
             module.start()
-            start = time.monotonic()
+            self.started = start = time.monotonic()
+            last = start
 
             while (t := time.monotonic() - start) < module.duration:
                 frame_start = time.monotonic()
@@ -32,5 +49,9 @@ class Scheduler:
                 rest = self.frame_time - (time.monotonic() - frame_start)
                 if rest > 0:
                     time.sleep(rest)
+                # real frame rate, smoothed so the number does not jump around
+                now = time.monotonic()
+                self.fps = 0.9 * self.fps + 0.1 / max(now - last, 1e-6)
+                last = now
 
-            index = (index + 1) % len(self.modules)
+            self.index = (self.index + 1) % len(self.modules)

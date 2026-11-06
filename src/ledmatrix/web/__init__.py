@@ -1,0 +1,1 @@
+"""Web interface: live picture, status and settings in the browser."""

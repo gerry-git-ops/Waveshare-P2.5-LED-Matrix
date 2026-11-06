@@ -39,10 +39,18 @@ class ModuleConfig(BaseModel):
     enabled: bool = True
     duration: float | None = Field(None, gt=0)
 
+class WebConfig(BaseModel):
+    """Web interface (needs the web extra: pip install -e ".[web]")."""
+
+    enabled: bool = True
+    host: str = "0.0.0.0"      # 0.0.0.0 = reachable in your home network
+    port: int = Field(8080, ge=1, le=65535)
+
 class Config(BaseModel):
     """The whole configuration."""
 
     hardware: HardwareConfig = HardwareConfig()
+    web: WebConfig = WebConfig()
     fps: int = Field(30, ge=1, le=120)
     modules: list[ModuleConfig] = []
     language: str = "en"

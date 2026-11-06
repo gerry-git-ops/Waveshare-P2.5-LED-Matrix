@@ -9,6 +9,8 @@ class Module(ABC):
     """A module draws one image per frame."""
 
     duration: float = 10.0  # seconds on screen before the next module
+    name: str = ""          # type in config.yaml, e.g. "clock" (set by create_module)
+    config_index: int = -1  # position in the module list of config.yaml
 
     # translations: {"en": {"key": "text", ...}, "de": {...}, ...}
     texts: dict[str, dict[str, str]] = {}
