@@ -3,7 +3,7 @@
 from PIL import Image
 
 from ledmatrix.modules.base import Module
-from ledmatrix.widgets.scrolling_text import ScrollingText
+from ledmatrix.widgets.text.scrolling_text import ScrollingText
 
 
 class ScrollText(Module):

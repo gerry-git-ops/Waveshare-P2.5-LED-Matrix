@@ -7,8 +7,8 @@ from PIL import Image, ImageDraw
 
 from ledmatrix.fonts import fit_font
 from ledmatrix.modules.base import Module
-from ledmatrix.widgets.countdown import Countdown
-from ledmatrix.widgets.snow import Snow
+from ledmatrix.widgets.text.countdown import Countdown
+from ledmatrix.widgets.effects.snow import Snow
 
 BULB_COLORS = [(255, 40, 40), (40, 220, 60), (255, 190, 0), (40, 120, 255), (230, 60, 230)]
 

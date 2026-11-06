@@ -3,7 +3,7 @@
 from PIL import Image
 
 from ledmatrix.modules.base import Module
-from ledmatrix.widgets.gif import Gif
+from ledmatrix.widgets.media.gif import Gif
 
 
 class GifPlayer(Module):

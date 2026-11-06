@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 
 from ledmatrix.fonts import fit_font
 from ledmatrix.modules.base import Module
-from ledmatrix.widgets.countdown import Countdown
+from ledmatrix.widgets.text.countdown import Countdown
 
 
 def to_datetime(value: str | date | datetime) -> datetime:

@@ -1,0 +1,1 @@
+"""Widgets that show images and animations."""
