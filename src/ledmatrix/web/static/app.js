@@ -13,6 +13,11 @@ const TEXTS = {
     pixels: "Pixels", panel: "Panel", chains: "Chains", per_chain: "Panels per chain",
     mapping: "GPIO mapping", slowdown: "GPIO slowdown", colors: "Color order",
     fps: "Frames per second", language: "Language",
+    matrix: "Matrix", host: "Host", cpu: "CPU", temperature: "Temperature", memory: "Memory",
+    disk: "Storage", uptime: "Uptime", system: "System", cores: "Cores", frequency: "Clock",
+    load: "Load (1/5/15 min)", hostname: "Hostname", ip: "IP address", os: "Operating system",
+    python: "Python", not_available: "not reported by this system", of: "of",
+    d: "d", h: "h", min: "min",
   },
   de: {
     design: "Design", system: "System", light: "Hell", dark: "Dunkel",
@@ -25,6 +30,11 @@ const TEXTS = {
     pixels: "Pixel", panel: "Panel", chains: "Ketten", per_chain: "Panels pro Kette",
     mapping: "GPIO-Belegung", slowdown: "GPIO-Bremse", colors: "Farbreihenfolge",
     fps: "Bilder pro Sekunde", language: "Sprache",
+    matrix: "Matrix", host: "Host", cpu: "CPU", temperature: "Temperatur", memory: "Arbeitsspeicher",
+    disk: "Speicherplatz", uptime: "Laufzeit", system: "System", cores: "Kerne", frequency: "Takt",
+    load: "Last (1/5/15 min)", hostname: "Hostname", ip: "IP-Adresse", os: "Betriebssystem",
+    python: "Python", not_available: "wird von diesem System nicht gemeldet", of: "von",
+    d: "T", h: "Std", min: "Min",
   },
     fr: {
     design: "Thème", system: "Système", light: "Clair", dark: "Sombre",
@@ -37,6 +47,11 @@ const TEXTS = {
     pixels: "Pixels", panel: "Panneau", chains: "Chaînes", per_chain: "Panneaux par chaîne",
     mapping: "Brochage GPIO", slowdown: "Ralentissement GPIO", colors: "Ordre des couleurs",
     fps: "Images par seconde", language: "Langue",
+    matrix: "Matrice", host: "Hôte", cpu: "CPU", temperature: "Température", memory: "Mémoire",
+    disk: "Stockage", uptime: "En marche depuis", system: "Système", cores: "Cœurs", frequency: "Fréquence",
+    load: "Charge (1/5/15 min)", hostname: "Nom d'hôte", ip: "Adresse IP", os: "Système d'exploitation",
+    python: "Python", not_available: "non fourni par ce système", of: "sur",
+    d: "j", h: "h", min: "min",
   },
   es: {
     design: "Diseño", system: "Sistema", light: "Claro", dark: "Oscuro",
@@ -49,6 +64,11 @@ const TEXTS = {
     pixels: "Píxeles", panel: "Panel", chains: "Cadenas", per_chain: "Paneles por cadena",
     mapping: "Asignación GPIO", slowdown: "Ralentización GPIO", colors: "Orden de colores",
     fps: "Imágenes por segundo", language: "Idioma",
+    matrix: "Matriz", host: "Host", cpu: "CPU", temperature: "Temperatura", memory: "Memoria",
+    disk: "Almacenamiento", uptime: "Tiempo activo", system: "Sistema", cores: "Núcleos", frequency: "Frecuencia",
+    load: "Carga (1/5/15 min)", hostname: "Nombre del equipo", ip: "Dirección IP", os: "Sistema operativo",
+    python: "Python", not_available: "este sistema no lo informa", of: "de",
+    d: "d", h: "h", min: "min",
   },
 };
 let T = TEXTS.en;
@@ -132,6 +152,39 @@ function renderHardware(c) {
   );
 }
 
+// ---------- host: the computer the matrix runs on ----------
+const size = (bytes) => bytes >= 1e9 ? (bytes / 1e9).toFixed(1) + " GB" : Math.round(bytes / 1e6) + " MB";
+function duration(seconds) {
+  const d = Math.floor(seconds / 86400), h = Math.floor(seconds % 86400 / 3600), m = Math.floor(seconds % 3600 / 60);
+  return (d ? `${d} ${t("d")} ` : "") + (d || h ? `${h} ${t("h")} ` : "") + `${m} ${t("min")}`;
+}
+function bar(percent, warn = 70, hot = 85) {
+  const level = percent >= hot ? "hot" : percent >= warn ? "warn" : "";
+  return `<div class="bar ${level}"><div style="width:${Math.min(100, percent)}%"></div></div>`;
+}
+function renderHost(h) {
+  document.getElementById("host-model").textContent = `(${h.model})`;
+  const tile = (title, body) => `<div class="tile"><div class="tile-head"><span class="tile-name">${t(title)}</span></div>${body}</div>`;
+  const row = (k, v) => `<div class="row"><span>${t(k)}</span><span>${esc(v)}</span></div>`;
+  const temp = h.temperature === null
+    ? `<div class="big">–</div><div class="rows"><div class="row"><span>${t("not_available")}</span><span></span></div></div>`
+    : `<div class="big">${h.temperature} °C</div>${bar(h.temperature, 65, 80)}`;
+  document.getElementById("host-list").replaceChildren(
+    el(tile("cpu", `<div class="big">${h.cpu.percent} %</div>${bar(h.cpu.percent)}<div class="rows" style="margin-top:10px">
+      ${row("cores", h.cpu.cores)}${h.cpu.mhz ? row("frequency", h.cpu.mhz + " MHz") : ""}${row("load", h.cpu.load.join(" · "))}</div>`)),
+    el(tile("temperature", temp)),
+    el(tile("memory", `<div class="big">${h.memory.percent} %</div>${bar(h.memory.percent)}
+      <div class="rows" style="margin-top:10px"><div class="row"><span>${size(h.memory.used)} ${t("of")} ${size(h.memory.total)}</span><span></span></div></div>`)),
+    el(tile("disk", `<div class="big">${h.disk.percent} %</div>${bar(h.disk.percent, 80, 90)}
+      <div class="rows" style="margin-top:10px"><div class="row"><span>${size(h.disk.used)} ${t("of")} ${size(h.disk.total)}</span><span></span></div></div>`)),
+    el(tile("uptime", `<div class="big">${duration(h.uptime)}</div>`)),
+    el(tile("system", `<div class="rows">${row("hostname", h.hostname)}${row("ip", h.ip)}${row("os", h.os)}${row("python", h.python)}</div>`)),
+  );
+}
+async function updateHost() {
+  try { renderHost(await api("/api/host")); } catch {}
+}
+
 // ---------- status, polled every second ----------
 async function updateStatus() {
   try {
@@ -161,4 +214,6 @@ async function updateStatus() {
   });
   updateStatus();
   setInterval(updateStatus, 1000);
+  updateHost();
+  setInterval(updateHost, 3000);
 })();

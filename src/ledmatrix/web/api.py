@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from ledmatrix.config import Config
 from ledmatrix.scheduler import Scheduler
 from ledmatrix.web.hub import FrameHub
+from ledmatrix.web.host import host_info
 
 
 def create_app(cfg: Config, scheduler: Scheduler, hub: FrameHub, preview: bool) -> FastAPI:
@@ -52,6 +53,11 @@ def create_app(cfg: Config, scheduler: Scheduler, hub: FrameHub, preview: bool) 
             for i, m in enumerate(cfg.modules)
         ]
 
+    @app.get("/api/host")
+    def host() -> dict:
+        """The computer the matrix runs on: model, CPU, temperature, memory, disk, uptime."""
+        return host_info()
+        
     @app.get("/api/stream")
     async def stream() -> StreamingResponse:
         """Live picture as Server-Sent Events: one message per new frame."""
