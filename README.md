@@ -164,7 +164,9 @@ It runs next to the panels, or completely **without any hardware**.
 - **Modules** – every module of your config, on or off, with its options (colors as swatches)
 - **Hardware** – display size, panels, chains, brightness and wiring at a glance
 - **Design** – system, light or dark; the texts follow `language` (en, de, fr, es)
-- **API** – JSON at `/api/status`, `/api/config`, `/api/modules`, documented at `/api/docs`
+- **API** – JSON at `/api/status`, `/api/config`, `/api/modules` – for other devices and scripts.
+  The running program describes it itself: open `http://<IP of your Pi>:8080/api/docs`
+  (an interactive page made by FastAPI, not a file in the repository)
 
 The web interface is **optional**: install it with `pip install -e ".[web]"`,
 switch it off with `web: {enabled: false}` in the config.
@@ -573,15 +575,26 @@ Waveshare-P2.5-LED-Matrix/
 │   │   └── voyage.py           voyage countdown with ship
 │   ├── widgets/                building blocks for modules
 │   │   ├── base.py             base class for all widgets
-│   │   ├── effects/            moving effects – snow, particles
-│   │   ├── media/              images and animations – GIF
-│   │   ├── scenery/            backgrounds – sky, water
-│   │   └── text/               text – scrolling text, countdown
+│   │   ├── effects/            moving effects
+│   │   │   ├── particles.py    burst an image into pixels and gather them again
+│   │   │   └── snow.py         falling snow
+│   │   ├── media/              images and animations
+│   │   │   └── gif.py          animated GIF or still image
+│   │   ├── scenery/            backgrounds
+│   │   │   ├── sky.py          sky with clouds
+│   │   │   └── water.py        water with waves
+│   │   └── text/               text
+│   │       ├── countdown.py    days and time left
+│   │       └── scrolling_text.py  scrolling text
 │   ├── web/                    web interface (optional extra)
 │   │   ├── hub.py              passes every frame to the panels and the browser
 │   │   ├── api.py              JSON API and live stream (FastAPI)
 │   │   ├── server.py           starts the web server next to the display
-│   │   └── static/             the page: HTML, CSS, JavaScript
+│   │   └── static/             the page
+│   │       ├── index.html      layout of the page
+│   │       ├── style.css       look: light and dark design
+│   │       ├── led.js          live picture as glowing LEDs
+│   │       └── app.js          menu, texts and data from the API
 │   └── assets/fonts/           Inter font and its license
 └── pyproject.toml              project metadata and dependencies
 ```
