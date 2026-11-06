@@ -39,18 +39,18 @@
 - [x] Hardware-independent design: panel size, rows, chain length and wiring only in `config.yaml`
 - [x] Preview mode without hardware, for developing modules on a PC
 
-## Phase 3 – First modules 🔜
+## Phase 3 – First modules ✅
 
 - [x] Scrolling text (color or rainbow, runs a set number of loops)
 - [x] Switch modules on and off in the config (`enabled`)
 - [x] Clock
 - [x] Christmas countdown with garland, tree and snow 🎄
 - [x] Texts in several languages (en, de, fr, es)
-- [ ] Countdown to any date
+- [x] Countdown to any date
 - [x] GIF player with example GIF
-- [x] Widgets as reusable building blocks (scrolling text, GIF, snow)
+- [x] Widgets as reusable building blocks (scrolling text, GIF, snow, countdown)
 
-## Phase 4 – Running it for real
+## Phase 4 – Running it for real 🔜
 
 - [ ] Autostart as a systemd service
 - [ ] Brightness schedule (dimmer at night)
@@ -63,6 +63,8 @@
 - [ ] Control and configuration from a web page
 - [ ] Transitions between modules
 - [ ] API interface (matrix on/off) for commands from external devices (e.g. Siemens S7)
+
+> 💡 **Missing something?** [Open an issue](https://github.com/gerry-git-ops/Waveshare-P2.5-LED-Matrix/issues/new) – ideas and module requests are welcome.
 
 ---
 

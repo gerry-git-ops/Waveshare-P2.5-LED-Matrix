@@ -238,6 +238,7 @@ nothing breaks.
 | Module | Text keys |
 |--------|-----------|
 | `christmas` | `title`, `days`, `day`, `done` |
+| `countdown` | `title`, `days`, `day`, `done` |
 | `scrolltext` | `text` |
 
 **Your language is missing?** Add it to the `texts` of the module (see
@@ -250,7 +251,7 @@ nothing breaks.
 | `clock` | Digital clock, scales itself to the display | `color`, `fmt` ([strftime](https://docs.python.org/3/library/time.html#time.strftime)) | ✅ |
 | `christmas` | 🎄 Countdown to Christmas Eve with garland, tree and snow | `hour`, `snow`, [texts](#-languages) | ✅ |
 | `scrolltext` | Scrolling text in one color or rainbow, runs a set number of times | `loops`, `speed`, `size`, `color`, `rainbow`, [`text`](#-languages) | ✅ |
-| Countdown | Days, hours, minutes until a date | | planned |
+| `countdown` | Days and time left until any date, with a message once it is reached | `date`, `title_color`, `days_color`, `time_color`, [texts](#-languages) | ✅ |
 | `gif` | Plays an animated GIF a set number of times | `file`, `fit`, `speed`, `loops` | ✅ |
 | Crypto ticker | Prices via web API, with history | | idea |
 
@@ -276,6 +277,19 @@ nothing breaks.
 
 > [!NOTE]
 > Leave out `duration` for `scrolltext` – otherwise it overrides the loops.
+
+<div align="center">
+<img src="docs/images/countdown-example.png" width="60%" alt="Countdown module on the LED matrix">
+<br><sub><code>countdown</code> – title on top, days and time below. Once the date is reached, it shows the <code>done</code> text.</sub>
+</div>
+
+```yaml
+  - type: countdown
+    duration: 10
+    date: "2027-01-01 00:00"  # "YYYY-MM-DD" or "YYYY-MM-DD HH:MM"
+    title: "Holiday in"       # optional, replaces the translated title
+    done: "Have fun!"         # optional, shown once the date is reached
+```
 
 <div align="center">
 <img src="docs/images/gif-star.gif" width="60%" alt="Example GIF of a spinning star on the LED matrix">
@@ -304,9 +318,10 @@ Modules don't have to start from scratch: **widgets** are small building blocks 
 | `ScrollingText` | text moving from right to left | `text`, `color`, `rainbow`, `speed`, `size` |
 | `Gif` | an animated GIF or a still image | `path`, `fit`, `speed` |
 | `Snow` | falling snowflakes | `count`, `color` |
+| `Countdown` | days and time left until a moment | `target`, `day`, `days`, `days_color`, `time_color` |
 
 The built-in modules are made of them, too: `scrolltext` is one `ScrollingText`,
-`gif` is one `Gif`, and `christmas` uses `Snow`.
+`gif` is one `Gif`, `countdown` is one `Countdown`, and `christmas` uses `Snow` and `Countdown`.
 
 Example – a star with falling snow and a rainbow text in the bottom row:
 
@@ -456,10 +471,12 @@ Waveshare-P2.5-LED-Matrix/
 │   │   ├── base.py             base class for all modules (incl. translations)
 │   │   ├── clock.py            clock module
 │   │   ├── christmas.py        Christmas countdown
+│   │   ├── countdown.py        countdown to any date
 │   │   ├── gif.py              GIF player
 │   │   └── scrolltext.py       scrolling text
 │   ├── widgets/                building blocks for modules
 │   │   ├── base.py             base class for all widgets
+│   │   ├── countdown.py        days and time left
 │   │   ├── gif.py              animated GIF
 │   │   ├── scrolling_text.py   scrolling text
 │   │   └── snow.py             falling snow
@@ -519,6 +536,15 @@ With `sudo`, always use the Python of the venv: `sudo .venv/bin/python -m ledmat
 
 <br>An address line (A, B, C or D) is missing on that chain – check the wiring.
 </details>
+
+## ✦ Ideas & contributions
+
+This project lives from ideas – **yours are very welcome!**
+
+- 💡 **An idea or a wish?** [Open an issue](https://github.com/gerry-git-ops/Waveshare-P2.5-LED-Matrix/issues/new) and describe it.
+- 🧩 **Need a special module?** Describe what it should show – I'm happy to build modules on request.
+- 🐞 **Found a bug?** Open an issue with what you did, what you expected and, if possible, a photo of the panels.
+- 🔧 **Built something yourself?** A new module, widget or language – pull requests are welcome.
 
 ## ✦ License
 

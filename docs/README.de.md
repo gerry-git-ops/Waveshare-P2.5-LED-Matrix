@@ -238,6 +238,7 @@ es bricht also nichts.
 | Modul | Text-Schlüssel |
 |-------|----------------|
 | `christmas` | `title`, `days`, `day`, `done` |
+| `countdown` | `title`, `days`, `day`, `done` |
 | `scrolltext` | `text` |
 
 **Deine Sprache fehlt?** Ergänze sie in den `texts` des Moduls (siehe
@@ -250,7 +251,7 @@ es bricht also nichts.
 | `clock` | Digitale Uhr, passt sich selbst an die Anzeige an | `color`, `fmt` ([strftime](https://docs.python.org/3/library/time.html#time.strftime)) | ✅ |
 | `christmas` | 🎄 Countdown bis Heiligabend mit Lichterkette, Baum und Schnee | `hour`, `snow`, [Texte](#-sprachen) | ✅ |
 | `scrolltext` | Lauftext in einer Farbe oder im Regenbogen, läuft eine festgelegte Anzahl Mal durch | `loops`, `speed`, `size`, `color`, `rainbow`, [`text`](#-sprachen) | ✅ |
-| Countdown | Tage, Stunden, Minuten bis zu einem Datum | | geplant |
+| `countdown` | Tage und Zeit bis zu einem beliebigen Datum, danach ein eigener Text | `date`, `title_color`, `days_color`, `time_color`, [Texte](#-sprachen) | ✅ |
 | `gif` | Spielt ein animiertes GIF eine festgelegte Anzahl Mal ab | `file`, `fit`, `speed`, `loops` | ✅ |
 | Krypto-Ticker | Kurse per Web-API, mit Verlauf | | Idee |
 
@@ -276,6 +277,19 @@ es bricht also nichts.
 
 > [!NOTE]
 > Beim `scrolltext` keine `duration` angeben – sonst überstimmt sie die Durchläufe.
+
+<div align="center">
+<img src="images/countdown-example.png" width="60%" alt="Countdown-Modul auf der LED-Matrix">
+<br><sub><code>countdown</code> – oben der Titel, darunter Tage und Zeit. Ist das Datum erreicht, erscheint der <code>done</code>-Text.</sub>
+</div>
+
+```yaml
+  - type: countdown
+    duration: 10
+    date: "2027-01-01 00:00"  # "JJJJ-MM-TT" oder "JJJJ-MM-TT HH:MM"
+    title: "Urlaub in"        # optional, ersetzt den übersetzten Titel
+    done: "Viel Spaß!"        # optional, erscheint, wenn das Datum erreicht ist
+```
 
 <div align="center">
 <img src="images/gif-star.gif" width="60%" alt="Beispiel-GIF eines drehenden Sterns auf der LED-Matrix">
@@ -304,9 +318,10 @@ in einen *Bereich* zeichnen, den du ihnen vorgibst. Ein Modul setzt sie nur noch
 | `ScrollingText` | Text, der von rechts nach links läuft | `text`, `color`, `rainbow`, `speed`, `size` |
 | `Gif` | ein animiertes GIF oder ein Standbild | `path`, `fit`, `speed` |
 | `Snow` | fallende Schneeflocken | `count`, `color` |
+| `Countdown` | Tage und Zeit bis zu einem Zeitpunkt | `target`, `day`, `days`, `days_color`, `time_color` |
 
 Auch die eingebauten Module bestehen daraus: `scrolltext` ist ein `ScrollingText`,
-`gif` ist ein `Gif`, und `christmas` nutzt `Snow`.
+`gif` ist ein `Gif`, `countdown` ist ein `Countdown`, und `christmas` nutzt `Snow` und `Countdown`.
 
 Beispiel – ein Stern mit Schneefall und ein Regenbogen-Text in der unteren Zeile:
 
@@ -456,10 +471,12 @@ Waveshare-P2.5-LED-Matrix/
 │   │   ├── base.py             Basisklasse für alle Module (inkl. Übersetzungen)
 │   │   ├── clock.py            Uhr-Modul
 │   │   ├── christmas.py        Weihnachts-Countdown
+│   │   ├── countdown.py        Countdown zu einem beliebigen Datum
 │   │   ├── gif.py              GIF-Player
 │   │   └── scrolltext.py       Lauftext
 │   ├── widgets/                Bausteine für Module
 │   │   ├── base.py             Basisklasse für alle Widgets
+│   │   ├── countdown.py        Tage und Zeit bis zum Ziel
 │   │   ├── gif.py              animiertes GIF
 │   │   ├── scrolling_text.py   Lauftext
 │   │   └── snow.py             Schneefall
@@ -519,6 +536,15 @@ Mit `sudo` immer das Python der venv nehmen: `sudo .venv/bin/python -m ledmatrix
 
 <br>Auf dieser Kette fehlt eine Adressleitung (A, B, C oder D) – Verdrahtung prüfen.
 </details>
+
+## ✦ Ideen & Mitmachen
+
+Dieses Projekt lebt von Ideen – **deine sind herzlich willkommen!**
+
+- 💡 **Eine Idee oder ein Wunsch?** [Eröffne ein Issue](https://github.com/gerry-git-ops/Waveshare-P2.5-LED-Matrix/issues/new) und beschreib sie.
+- 🧩 **Du brauchst ein spezielles Modul?** Beschreib, was es zeigen soll – ich baue gern Module auf Wunsch.
+- 🐞 **Einen Fehler gefunden?** Eröffne ein Issue: was du gemacht hast, was du erwartet hast und wenn möglich ein Foto der Panels.
+- 🔧 **Selbst etwas gebaut?** Ein neues Modul, Widget oder eine Sprache – Pull Requests sind willkommen.
 
 ## ✦ Lizenz
 

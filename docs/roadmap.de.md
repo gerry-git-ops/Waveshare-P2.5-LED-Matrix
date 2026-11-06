@@ -39,18 +39,18 @@
 - [x] Hardware-unabhängiger Aufbau: Panelgröße, Reihen, Kettenlänge und Verdrahtung nur in der `config.yaml`
 - [x] Vorschau-Modus ohne Hardware, um Module am PC zu entwickeln
 
-## Phase 3 – Erste Module 🔜
+## Phase 3 – Erste Module ✅
 
 - [x] Lauftext (einfarbig oder Regenbogen, mit festgelegter Anzahl Durchläufe)
 - [x] Module in der Config ein- und ausschalten (`enabled`)
 - [x] Uhr
 - [x] Weihnachts-Countdown mit Lichterkette, Baum und Schnee 🎄
 - [x] Texte in mehreren Sprachen (en, de, fr, es)
-- [ ] Countdown zu einem beliebigen Datum
+- [x] Countdown zu einem beliebigen Datum
 - [x] GIF-Player mit Beispiel-GIF
-- [x] Widgets als wiederverwendbare Bausteine (Lauftext, GIF, Schnee)
+- [x] Widgets als wiederverwendbare Bausteine (Lauftext, GIF, Schnee, Countdown)
 
-## Phase 4 – Dauerbetrieb
+## Phase 4 – Dauerbetrieb 🔜
 
 - [ ] Autostart als systemd-Dienst
 - [ ] Helligkeitsplan (nachts dunkler)
@@ -63,6 +63,8 @@
 - [ ] Steuerung und Einstellungen über eine Webseite
 - [ ] Übergänge zwischen den Modulen
 - [ ] API-Schnittstelle (Matrix an/aus) für Befehle von externen Geräten (z.B. Siemens S7)
+
+> 💡 **Dir fehlt etwas?** [Eröffne ein Issue](https://github.com/gerry-git-ops/Waveshare-P2.5-LED-Matrix/issues/new) – Ideen und Modulwünsche sind willkommen.
 
 ---
 
