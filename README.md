@@ -329,9 +329,9 @@ Example – a star with falling snow and a rainbow text in the bottom row:
 from PIL import Image
 
 from ledmatrix.modules.base import Module
-from ledmatrix.widgets.gif import Gif
-from ledmatrix.widgets.scrolling_text import ScrollingText
-from ledmatrix.widgets.snow import Snow
+from ledmatrix.widgets.media.gif import Gif
+from ledmatrix.widgets.text.scrolling_text import ScrollingText
+from ledmatrix.widgets.effects.snow import Snow
 
 
 class StarNight(Module):
@@ -476,10 +476,9 @@ Waveshare-P2.5-LED-Matrix/
 │   │   └── scrolltext.py       scrolling text
 │   ├── widgets/                building blocks for modules
 │   │   ├── base.py             base class for all widgets
-│   │   ├── countdown.py        days and time left
-│   │   ├── gif.py              animated GIF
-│   │   ├── scrolling_text.py   scrolling text
-│   │   └── snow.py             falling snow
+│   │   ├── effects/            moving effects – snow
+│   │   ├── media/              images and animations – GIF
+│   │   └── text/               text – scrolling text, countdown
 │   ├── preview/
 │   │   ├── renderer.py         web server for the browser preview
 │   │   └── index.html          preview page
