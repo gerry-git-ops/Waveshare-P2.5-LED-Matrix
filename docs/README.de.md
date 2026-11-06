@@ -163,13 +163,14 @@ Sie läuft neben den Panels oder ganz **ohne Hardware**.
   Screenshot, Vollbild und die Pixel-Koordinate unter der Maus
 - **Gerade zu sehen** – welches Modul läuft, wie lange noch, echte Bilder pro Sekunde
 - **Module** – alle Module deiner Config, an oder aus, mit ihren Optionen (Farben als Farbfelder)
-- **Hardware** – Displaygröße, Panels, Ketten, Helligkeit und Anschluss auf einen Blick
+- **Hardware** – die Matrix (Displaygröße, Panels, Ketten, Helligkeit, Anschluss) und der Rechner, auf dem sie läuft:
+  Modell, CPU, Temperatur, Arbeitsspeicher, Speicherplatz, Laufzeit und IP-Adresse – Balken werden orange und rot, wenn es eng wird
 - **Design** – System, Hell oder Dunkel; die Texte folgen `language` (en, de, fr, es)
-- **API** – JSON unter `/api/status`, `/api/config`, `/api/modules` – für andere Geräte und Skripte.
+- **API** – JSON unter `/api/status`, `/api/config`, `/api/modules`, `/api/host` – für andere Geräte und Skripte.
   Das laufende Programm beschreibt sie selbst: `http://<IP deines Pi>:8080/api/docs` öffnen
   (eine interaktive Seite von FastAPI, keine Datei im Repository)
 
-Die Web-Oberfläche ist **optional**: installieren mit `pip install -e ".[web]"`,
+Die Web-Oberfläche ist **optional**: installieren mit `pip install -e ".[web]"` (FastAPI, uvicorn und psutil),
 abschalten mit `web: {enabled: false}` in der Config.
 
 > [!IMPORTANT]
@@ -590,6 +591,7 @@ Waveshare-P2.5-LED-Matrix/
 │   ├── web/                    Web-Oberfläche (optionales Extra)
 │   │   ├── hub.py              gibt jedes Bild an die Panels und den Browser
 │   │   ├── api.py              JSON-API und Live-Stream (FastAPI)
+│   │   ├── host.py             Daten des Rechners: Modell, CPU, Temperatur, Speicher …
 │   │   ├── server.py           startet den Webserver neben der Anzeige
 │   │   └── static/             die Seite
 │   │       ├── index.html      Aufbau der Seite
