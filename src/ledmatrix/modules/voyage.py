@@ -4,7 +4,7 @@ from datetime import date, datetime
 
 from PIL import Image, ImageDraw, ImageFilter
 
-from ledmatrix import colors
+from ledmatrix import colors, transitions
 from ledmatrix.fonts import fit_font
 from ledmatrix.modules.base import Module
 from ledmatrix.modules.countdown import CountdownModule, to_datetime
@@ -12,6 +12,7 @@ from ledmatrix.widgets.effects.particles import Particles
 from ledmatrix.widgets.scenery.sky import Sky
 from ledmatrix.widgets.scenery.water import Water
 from ledmatrix.widgets.text.countdown import Countdown
+from ledmatrix.widgets.media.gif import Gif
 
 Color = colors.Color
 
@@ -39,6 +40,9 @@ class Voyage(Module):
                  days_color: Color | None = None,
                  time_color: Color | None = None,
                  line_colors: list[Color] | None = None,
+                 finale: list[dict] | None = None,
+                 transition: str = "fade",
+                 transition_time: float = 1.5,
                  **kwargs) -> None:
         super().__init__(width, height, **kwargs)
         if ship_speed <= 0:
@@ -76,6 +80,21 @@ class Voyage(Module):
                                    days_color=days_color, time_color=time_color)
         self.lines = self._lines_image(lines or [self.text("trip")])
         self.lines_halo = self._halo(self.lines)
+        # finale: GIFs or pictures after the trip lines, each one blends into the next.
+        # every part stays fully visible for its time, the blending comes on top
+        self.blend = transitions.get(transition)
+        self.blend_time = transition_time
+        self.finale: list[tuple[float, float, Gif, bool]] = []   # start, length, picture, play once
+        end = self.duration                                      # end of the trip lines
+        for item in finale or []:
+            gif = Gif(width, height, item["file"], fit=item.get("fit", "contain"))
+            animated = len(gif.frames) > 1
+            once = animated and "hold" not in item                # a clip without hold runs once
+            length = gif.length if once else item.get("hold", 3.0)
+            start = end                                           # blending in starts here
+            self.finale.append((start, length, gif, once))
+            end = start + transition_time + length                # then fully visible for 'length' s
+        self.duration = end
 
     # ---------- pictures ----------
 
@@ -138,7 +157,10 @@ class Voyage(Module):
     def _crash(self) -> None:
         """The time on screen at this moment bursts apart and is gathered into the lines."""
         self.particles.burst(self._countdown_image(), self.impact_point, self.impact)
-        self.particles.gather(self.lines, self.impact + 0.6, attractor=self._stern, release=self._release)
+        # release time for every column, worked out once instead of for every single pixel
+        release = [self._release(x) for x in range(self.width)]
+        self.particles.gather(self.lines, self.impact + 0.6, attractor=self._stern,
+                              release=lambda x: release[int(x)])
         self.crashed = True
 
     @staticmethod
@@ -147,7 +169,33 @@ class Voyage(Module):
         lit = text_img.convert("L").point(lambda v: 255 if v > 40 else 0)
         return lit.filter(ImageFilter.MaxFilter(3))
 
+    def _finale_frame(self, index: int, t: float) -> Image.Image:
+        start, length, gif, once = self.finale[index]
+        local = max(0.0, t - start - self.blend_time)             # first frame while blending in
+        if once:
+            local = min(local, gif.length - 0.001)                # stop on the last frame
+        img = Image.new("RGB", (self.width, self.height))
+        gif.draw(img, 0, 0, local)
+        return img
+
     def render(self, t: float) -> Image.Image:
+        # the last part that has started: -1 is the ship scene, 0.. the finale pictures
+        index = -1
+        for i, (start, *_rest) in enumerate(self.finale):
+            if t >= start:
+                index = i
+        if index == -1:
+            return self._scene(t)
+
+        frame = self._finale_frame(index, t)
+        start = self.finale[index][0]
+        if t < start + self.blend_time:                           # still blending in
+            before = self._scene(t) if index == 0 else self._finale_frame(index - 1, t)
+            frame = self.blend(before, frame, (t - start) / self.blend_time)
+        return frame
+
+    def _scene(self, t: float) -> Image.Image:
+        """Sea, sky, ship, countdown and the trip lines."""
         img = Image.new("RGB", (self.width, self.height))
         self.sky.draw(img, 0, 0, t)
         self.water.draw(img, 0, self.horizon, t)

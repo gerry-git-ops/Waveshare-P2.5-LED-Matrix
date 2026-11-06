@@ -60,3 +60,9 @@ modules:                    # played in this order, then from the start
     palette: blue               # red, orange, gold, green, cyan, blue, purple, pink
     # ship: private/my_ship.png # optional, your own ship picture (transparent PNG)
     # title: "Holiday in"       # optional, replaces the translated title
+    finale:                     # optional: GIFs or pictures after the lines
+      - file: examples/star.gif   # a GIF without hold runs once
+      - file: examples/cruise_ship.png
+        hold: 3                   # a picture stays this many seconds
+        transition: fade            # fade or fade_black
+        transition_time: 1.5        # seconds, comes on top of the holds
